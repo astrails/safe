@@ -15,7 +15,7 @@ end
 
 def usage
   puts <<-END
-Usage: backup.rb [OPTIONS] CONFIG_FILE
+Usage: astrails-safe [OPTIONS] CONFIG_FILE
 Options:
   -h, --help           This help screen
   -v, --verbose        be verbose, duh!
