@@ -155,16 +155,23 @@ def create_gpg_password_file(pass)
 end
 
 
-def mysql_skip_tables(conf, db)
+def mysql_skip_tables(conf, db, cmd)
   if skip_tables = conf[:skip_tables]
-    skip_tables.map{|t| "--ignore-table=#{db}.#{t} "}.join
+    skip_tables.each do |t|
+      cmd << "--ignore-table=#{db}.#{t} "
+    end
   end
+  cmd
 end
 
+def mysqldump_extra_options(conf, cmd)
+  cmd << conf[:mysqldump_options] << " " if conf[:mysqldump_options]
+  cmd
+end
 def mysqldump(conf, db)
   cmd = "mysqldump  --defaults-extra-file=#{create_mysql_password_file(conf)} "
-  cmd << conf[:mysqldump_options] << " " if conf[:mysqldump_options]
-  cmd << mysql_skip_tables(conf, db)
+  cmd = mysqldump_extra_options(conf, cmd)
+  cmd = mysql_skip_tables(conf, db, cmd)
   cmd << " #{db} "
 
   path = conf[:path]
