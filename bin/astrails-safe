@@ -3,10 +3,10 @@
 require 'tmpdir'
 require 'tempfile'
 require 'rubygems'
-require 'ruby-debug'
 require 'fileutils'
 require "aws/s3"
 require 'yaml'
+#require 'ruby-debug'
 
 def die(msg)
   puts "ERROR: #{msg}"
