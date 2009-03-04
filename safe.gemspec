@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name     = "safe"
-  s.version  = "0.0.2"
+  s.version  = "0.0.3"
   s.date     = "2009-03-03"
   s.summary  = "Astrails Safe"
   s.email    = "we@astrails.com"
@@ -16,6 +16,5 @@ Gem::Specification.new do |s|
 
   s.test_files = []
   s.add_dependency("aws-s3")
-  s.add_dependency("yaml")
 end
 
