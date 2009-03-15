@@ -26,14 +26,20 @@ module Astrails
         alias :[] :find
 
         def set(key, value, &block)
-          @data[key.to_s] = if value.is_a?(Hash)
-                              Node.new(self, value, &block)
-                            else
-                              die "#{key}: no block supported for simple values" if block
-                              value
-                            end
+          @data[key.to_s] =
+            if value.is_a?(Hash)
+              Node.new(self, value, &block)
+            else
+              raise(ArgumentError, "#{key}: no block supported for simple values") if block
+              value
+            end
         end
         alias :[]= :set
+
+        def each(&block)
+          @data.each(&block)
+        end
+        include Enumerable
 
         def dump(indent = "")
           @data.each do |key, value|
@@ -45,10 +51,7 @@ module Astrails
             end
           end
         end
-        private
-        def die(msg)
-          raise ArgumentError, msg
-        end
+
       end
     end
   end

@@ -2,6 +2,10 @@ module Astrails
   module Safe
     module Config
       class Builder
+        COLLECTIONS = %w/database archive/
+        ITEMS = %w/s3 key secret bucket path gpg password keep local mysqldump options
+        user socket tar files exclude/
+        NAMES = COLLECTIONS + ITEMS
         def initialize(node)
           @node = node
         end
@@ -12,6 +16,7 @@ module Astrails
         #   args = [data]
         # id/value - simple values, data - hash
         def method_missing(sym, *args, &block)
+          return super unless NAMES.include?(sym.to_s)
 
           # do we have id or value?
           unless args.first.is_a?(Hash)
@@ -27,6 +32,10 @@ module Astrails
 
           die "#{sym}: unexpected: #{args.inspect}" unless args.empty?
           die "#{sym}: missing arguments" unless id_or_value || data || block
+
+          if COLLECTIONS.include?(sym.to_s) && id_or_value
+            data ||= {}
+          end
 
           if !data && !block
             # simple value assignment
