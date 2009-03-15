@@ -16,7 +16,7 @@ module Astrails
 
     def safe(&block)
       config = Config::Node.new(&block)
-      config.dump
+      #config.dump
 
       Astrails::Safe::Mysqldump.run(config[:mysqldump, :databases], timestamp)
       Astrails::Safe::TarArchive.run(config[:tar, :archives], timestamp)
