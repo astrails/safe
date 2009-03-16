@@ -4,7 +4,7 @@ require 'astrails/safe/config/builder'
 require 'astrails/safe/stream'
 require 'astrails/safe/engine'
 require 'astrails/safe/mysqldump'
-require 'astrails/safe/tar_archive'
+require 'astrails/safe/archive'
 
 module Astrails
   module Safe
@@ -19,7 +19,7 @@ module Astrails
       #config.dump
 
       Astrails::Safe::Mysqldump.run(config[:mysqldump, :databases], timestamp)
-      Astrails::Safe::TarArchive.run(config[:tar, :archives], timestamp)
+      Astrails::Safe::Archive.run(config[:tar, :archives], timestamp)
     end
   end
 end

@@ -15,14 +15,6 @@ module Astrails
 
       private
 
-      def path
-        @path ||=
-          begin
-            path = @config[:path] || raise(RuntimeError, "missing :path in configuration")
-            File.expand_path(path)
-          end
-      end
-
       def gpg_password_file(pass)
         Astrails::Safe::TmpFile.create("gpg-pass") { |file| file.write(pass) }
       end
@@ -56,7 +48,6 @@ module Astrails
       end
 
       def redirect
-        @filename = File.join(path, filename)
         @command << ">" << @filename
       end
 

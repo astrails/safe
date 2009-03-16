@@ -1,6 +1,6 @@
 module Astrails
   module Safe
-    class TarArchive < Engine
+    class Archive < Engine
 
       def command
         "tar -cf - #{@config[:options]} #{tar_exclude_files} #{tar_files}"

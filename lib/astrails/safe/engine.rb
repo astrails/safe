@@ -21,7 +21,7 @@ module Astrails
       def run
         puts "#{name}: #{@id}" if $_VERBOSE
 
-        stream = Stream.new(@config, command, backup_filename)
+        stream = Stream.new(@config, command, File.join(path, backup_filename))
         stream.run # execute backup comand. result is file stream.filename
 
         # UPLOAD
@@ -38,23 +38,34 @@ module Astrails
         self.class.name.split('::').last.downcase
       end
 
-      # FIXME: rename to default_prefix ?
-      def default_path
-        "#{name}/#{@id}"
+      def s3_path
+        @s3_path ||=
+          File.join(
+                    @config[:s3, :path] || "",
+                    @config[:s3, :prefix] || "#{name}/#{id}"
+                   )
       end
+
+      def path
+        @path ||=
+          File.expand_path(File.join(
+                                     @config[:path] || raise(RuntimeError, "missing :path in configuration"),
+                                     @config[:prefix] || "#{name}/#{id}"
+                                    ))
+      end
+
 
       def upload(filename)
 
         bucket = @config[:s3, :bucket]
         key    = @config[:s3, :key]
         secret = @config[:s3, :secret]
-        path   = @config[:s3, :path] || default_path
 
         return unless bucket && key && secret
 
-        s3_path = File.join(path, File.basename(filename))
+        upload_path = File.join(s3_path, File.basename(filename))
 
-        puts "Uploading file #{filename} to #{bucket}/#{s3_path}" if $_VERBOSE || $DRY_RUN
+        puts "Uploading file #{filename} to #{bucket}/#{upload_path}" if $_VERBOSE || $DRY_RUN
         if $LOCAL
           puts "skip upload (local operation)"
         else
@@ -99,12 +110,10 @@ module Astrails
 
         bucket = @config[:s3, :bucket]
 
-        prefix = @config[:s3, :path] || default_path
-
         base = File.basename(filename).split(".").first
 
-        puts "listing files in #{bucket}:#{prefix}"
-        files = AWS::S3::Bucket.objects(bucket, :prefix => prefix, :max_keys => keep * 2)
+        puts "listing files in #{bucket}:#{s3_path}"
+        files = AWS::S3::Bucket.objects(bucket, :prefix => s3_path, :max_keys => keep * 2)
         puts files.collect(&:key) if $_VERBOSE
 
         files = files.
