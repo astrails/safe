@@ -5,6 +5,10 @@ module Astrails
       @KEEP_FILES = []
       TMPDIR = Dir.mktmpdir
 
+      def self.cleanup
+        FileUtils.remove_entry_secure TMPDIR
+      end
+
       def self.create(name)
         # create temp directory
 
