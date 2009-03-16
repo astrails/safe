@@ -117,10 +117,10 @@ module Astrails
 
         puts "listing files in #{bucket}:#{s3_path}"
         files = AWS::S3::Bucket.objects(bucket, :prefix => s3_path, :max_keys => keep * 2)
-        puts files.collect(&:key) if $_VERBOSE
+        puts files.collect {|x| x.key} if $_VERBOSE
 
         files = files.
-          collect(&:key).
+          collect {|x| x.key}.
           select{|f| File.basename(f)[0..(base.length - 1)] == base}.
           sort
 
