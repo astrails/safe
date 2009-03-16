@@ -1,5 +1,4 @@
 require 'extensions/mktmpdir'
-
 require 'astrails/safe/tmp_file'
 require 'astrails/safe/config/node'
 require 'astrails/safe/config/builder'

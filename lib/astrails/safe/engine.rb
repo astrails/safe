@@ -34,8 +34,11 @@ module Astrails
 
       protected
 
+      def self.kind
+        name.split('::').last.downcase
+      end
       def kind
-        self.class.name.split('::').last.downcase
+        self.class.kind
       end
 
       def backup_filename

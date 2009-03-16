@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   lib/astrails/safe/engine.rb
   lib/astrails/safe/archive.rb
   lib/astrails/safe/tmp_file.rb
+  lib/extensions/mktmpdir.rb
   templates/script.rb
   safe.gemspec
   )
