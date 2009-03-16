@@ -4,7 +4,7 @@ module Astrails
 
       def self.run(config, timestamp)
         unless config
-          puts "No configuration found for #{name}"
+          puts "No configuration found for #{kind}"
           return
         end
         config.each do |key, value|
@@ -19,7 +19,7 @@ module Astrails
       end
 
       def run
-        puts "#{name}: #{@id}" if $_VERBOSE
+        puts "#{kind}: #{@id}" if $_VERBOSE
 
         stream = Stream.new(@config, command, File.join(path, backup_filename))
         stream.run # execute backup comand. result is file stream.filename
@@ -34,24 +34,24 @@ module Astrails
 
       protected
 
-      def name
+      def kind
         self.class.name.split('::').last.downcase
       end
 
+      def backup_filename
+        @backup_filename ||= "#{kind}-#{id}.#{timestamp}.tar"
+      end
+
+      def expand(path)
+        path.gsub(/:kind\b/, kind).gsub(/:id\b/, id)
+      end
+
       def s3_path
-        @s3_path ||=
-          File.join(
-                    @config[:s3, :path] || "",
-                    @config[:s3, :prefix] || "#{name}/#{id}"
-                   )
+        @s3_path ||= expand(@config[:s3, :path] || ":kind/:id")
       end
 
       def path
-        @path ||=
-          File.expand_path(File.join(
-                                     @config[:path] || raise(RuntimeError, "missing :path in configuration"),
-                                     @config[:prefix] || "#{name}/#{id}"
-                                    ))
+        @path ||= File.expand_path(expand(@config[:path] || raise(RuntimeError, "missing :path in configuration")))
       end
 
 

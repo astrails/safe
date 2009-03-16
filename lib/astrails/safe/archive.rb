@@ -6,15 +6,7 @@ module Astrails
         "tar -cf - #{@config[:options]} #{tar_exclude_files} #{tar_files}"
       end
 
-      def backup_filename
-        @backup_filename ||= "archive-#{@id}.#{timestamp}.tar"
-      end
-
       protected
-
-      def default_path
-        "archive/#{@id}"
-      end
 
       def tar_exclude_files
         [*@config[:exclude]].compact.map{|x| "--exclude=#{x}"} * " "

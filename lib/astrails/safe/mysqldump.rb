@@ -6,15 +6,7 @@ module Astrails
         "mysqldump  --defaults-extra-file=#{password_file} #{@config[:options]} #{mysql_skip_tables} #{@id}"
       end
 
-      def backup_filename
-        @backup_filename ||= "mysql-#{@id}.#{timestamp}.sql"
-      end
-
       protected
-
-      def default_path
-        "mysql/#{@id}"
-      end
 
       def password_file
         Astrails::Safe::TmpFile.create("mysqldump") do |file|

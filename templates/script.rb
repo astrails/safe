@@ -1,8 +1,10 @@
 safe do
   # global path
-  # actual backup oath is :path/:prefix/:filename
-  # you can set :path for all backups (or once globally here)
-  path "/backup"
+  # supported substitutions:
+  #   :kind -> backup 'engine' kind, e.g. "mysqldump" or "archive"
+  #   :id -> backup 'id', e.g. "blog", "production", etc.
+  # you can set separate :path for all backups (or once globally here)
+  path "/backup/:kind/:id"
 
   ## uncomment to enable uploads to Amazon S3
   ## Amazon S3 auth (optional)
@@ -32,8 +34,8 @@ safe do
   # backup mysql databases with mysqldump
   mysqldump do
     # you can override any setting from parent in a child:
-    # local path override for mysqldump
-    prefix "/mysql"
+    path "/backup/mysql/:id"
+
     options "-ceKq --single-transaction --create-options"
 
     user "astrails"
@@ -43,7 +45,7 @@ safe do
     socket "/var/run/mysqld/mysqld.sock"
 
     # database is a 'collection' element. it must have a hash or block parameter
-    # it will be 'collected' in a 'databases', with database name (1st arg) used as hash key
+    # it will be 'collected' in a 'databases', with database id (1st arg) used as hash key
     # the following code will create mysqldump/databases/blog and mysqldump/databases/mysql ocnfiguration 'nodes'
 
     # backup database with default values
@@ -51,8 +53,6 @@ safe do
 
     # backup overriding some values
     # database :production do
-    #   # default prefix for this backup is mysqldump/production, you can override it here.
-    #   # prefix "production/mysql"
     #   # you can override 'partially'
     #   keep :local => 3
     #   # keep/local is 3, and keep/s3 is 20 (from parent)
