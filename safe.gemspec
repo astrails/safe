@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name     = "safe"
-  s.version  = "0.0.4"
+  s.version  = "0.0.5"
   s.date     = "2009-03-15"
   s.summary  = "Astrails Safe"
   s.email    = "we@astrails.com"
