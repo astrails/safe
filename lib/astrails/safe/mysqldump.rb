@@ -6,6 +6,8 @@ module Astrails
         "mysqldump  --defaults-extra-file=#{password_file} #{@config[:options]} #{mysql_skip_tables} #{@id}"
       end
 
+      def extension; 'sql'; end
+
       protected
 
       def password_file

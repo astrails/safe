@@ -6,6 +6,8 @@ module Astrails
         "tar -cf - #{@config[:options]} #{tar_exclude_files} #{tar_files}"
       end
 
+      def extension; 'tar'; end
+
       protected
 
       def tar_exclude_files

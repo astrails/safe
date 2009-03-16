@@ -1,10 +1,12 @@
 safe do
-  # global path
+  # backup file path (full, including filename)
+  # Note: do not include .tar, .sql, .gz or .pgp, it will be added automatically
   # supported substitutions:
   #   :kind -> backup 'engine' kind, e.g. "mysqldump" or "archive"
   #   :id -> backup 'id', e.g. "blog", "production", etc.
+  #   :timestamp -> current run timestamp (same for all the backups in the same 'run')
   # you can set separate :path for all backups (or once globally here)
-  path "/backup/:kind/:id"
+  path "/backup/:kind/:id-:timestamp"
 
   ## uncomment to enable uploads to Amazon S3
   ## Amazon S3 auth (optional)
@@ -12,6 +14,8 @@ safe do
   #   key YOUR_S3_KEY
   #   secret YOUR_S3_SECRET
   #   bucket S3_BUCKET
+  #   # prefix for uploads to S3. supports same substitution like :path
+  #   prefix ":kind/:id" # this is default
   # end
 
   ## alternative style:
@@ -34,8 +38,6 @@ safe do
   # backup mysql databases with mysqldump
   mysqldump do
     # you can override any setting from parent in a child:
-    path "/backup/mysql/:id"
-
     options "-ceKq --single-transaction --create-options"
 
     user "astrails"
@@ -69,8 +71,6 @@ safe do
 
 
   tar do
-    path "/backup/archives"
-
     # 'archive' is a collection item, just like 'database'
     # archive "git-repositories" do
     #   # files and directories to backup
