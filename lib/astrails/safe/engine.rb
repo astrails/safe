@@ -21,15 +21,17 @@ module Astrails
       def run
         puts "#{kind}: #{@id}" if $_VERBOSE
 
-        stream = Stream.new(@config, command, backup_filepath)
-        stream.run # execute backup comand. result is file stream.filename
+        engines = @config[:store] || [:local]
 
-        # UPLOAD
-        upload(stream.filename)
+        unsupported = engines - [:local, :s3]
+        raise(RuntimeError, "invalid storage engine: #{unsupported.inspect}") unless unsupported.empty?
 
-        # CLEANUP
-        cleanup_s3(stream.filename)
-        cleanup_local(stream.filename)
+        stream = Command.new(@config, command, backup_filepath)
+
+        stream = Local.new(@config, stream) if engines.include?(:local)
+        stream = S3.new(@config, stream)    if engines.include?(:s3) && !$LOCAL
+
+        stream.run
       end
 
       protected
@@ -57,76 +59,6 @@ module Astrails
       end
 
 
-      def upload(filename)
-
-        bucket = @config[:s3, :bucket]
-        key    = @config[:s3, :key]
-        secret = @config[:s3, :secret]
-
-        return unless bucket && key && secret
-
-        upload_path = File.join(s3_prefix, File.basename(filename))
-
-        puts "Uploading file #{filename} to #{bucket}/#{upload_path}" if $_VERBOSE || $DRY_RUN
-        if $LOCAL
-          puts "skip upload (local operation)"
-        else
-          # needed in cleanup even on dry run
-          AWS::S3::Base.establish_connection!(:access_key_id => key, :secret_access_key => secret, :use_ssl => true)
-
-          unless $DRY_RUN
-            AWS::S3::Bucket.create(bucket)
-            AWS::S3::S3Object.store(upload_path, open(filename), bucket)
-          end
-        end
-        puts "...done" if $_VERBOSE
-      end
-
-      # call block on files to be removed (all except for the LAST 'limit' files
-      def cleanup_files(files, limit, &block)
-        return unless files.size > limit
-
-        to_remove = files[0..(files.size - limit - 1)]
-        to_remove.each(&block)
-      end
-
-      def cleanup_local(filename)
-        return unless keep = @config[:keep, :local]
-
-        dir = File.dirname(filename)
-        base = File.basename(filename).split(".").first
-
-        files = Dir[File.join(dir, "#{base}*")] .
-          select{|f| File.file?(f)} .
-          sort
-
-        cleanup_files(files, keep) do |f|
-          puts "removing local file #{f}" if $DRY_RUN || $_VERBOSE
-          File.unlink(f) unless $DRY_RUN
-        end
-      end
-
-      def cleanup_s3(filename)
-
-        return unless keep = @config[:keep, :s3]
-
-        bucket = @config[:s3, :bucket]
-
-        base = File.basename(filename).split(".").first
-
-        puts "listing files in #{bucket}:#{s3_prefix}"
-        files = AWS::S3::Bucket.objects(bucket, :prefix => "#{s3_prefix}/#{base}", :max_keys => keep * 2)
-        puts files.collect {|x| x.key} if $_VERBOSE
-
-        files = files.
-          collect {|x| x.key}.
-          sort
-
-        cleanup_files(files, keep) do |f|
-          puts "removing s3 file #{bucket}:#{f}" if $DRY_RUN || $_VERBOSE
-          AWS::S3::Bucket.find(bucket)[f].delete unless $DRY_RUN
-        end
-      end
 
     end
   end

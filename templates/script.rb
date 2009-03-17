@@ -8,6 +8,10 @@ safe do
   # you can set separate :path for all backups (or once globally here)
   path "/backup/:kind/:id-:timestamp"
 
+  # where to store the backups
+  # if you don't provide :local, it will be directly uploaded to S3
+  store [:local, :s3]
+
   ## uncomment to enable uploads to Amazon S3
   ## Amazon S3 auth (optional)
   # s3 do

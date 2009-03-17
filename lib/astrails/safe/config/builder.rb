@@ -4,7 +4,7 @@ module Astrails
       class Builder
         COLLECTIONS = %w/database archive/
         ITEMS = %w/s3 key secret bucket path prefix gpg password keep local mysqldump options
-        user socket tar files exclude/
+        user socket tar files exclude store/
         NAMES = COLLECTIONS + ITEMS
         def initialize(node)
           @node = node
