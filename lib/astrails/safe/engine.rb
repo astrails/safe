@@ -115,12 +115,11 @@ module Astrails
         base = File.basename(filename).split(".").first
 
         puts "listing files in #{bucket}:#{s3_prefix}"
-        files = AWS::S3::Bucket.objects(bucket, :prefix => s3_prefix, :max_keys => keep * 2)
+        files = AWS::S3::Bucket.objects(bucket, :prefix => "#{s3_prefix}/#{base}", :max_keys => keep * 2)
         puts files.collect {|x| x.key} if $_VERBOSE
 
         files = files.
           collect {|x| x.key}.
-          select{|f| File.basename(f)[0..(base.length - 1)] == base}.
           sort
 
         cleanup_files(files, keep) do |f|
