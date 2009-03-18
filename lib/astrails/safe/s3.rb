@@ -53,7 +53,6 @@ module Astrails
         end
       end
 
-
       def bucket
         config[:s3, :bucket]
       end

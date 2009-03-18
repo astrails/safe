@@ -36,6 +36,7 @@ module Astrails
         return unless files.size > limit
 
         to_remove = files[0..(files.size - limit - 1)]
+        # TODO: validate here
         to_remove.each(&block)
       end
 

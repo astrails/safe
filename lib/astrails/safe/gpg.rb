@@ -2,6 +2,10 @@ module Astrails
   module Safe
     class Gpg < Pipe
 
+      def compressed?
+        active? || @parent.compressed?
+      end
+
       protected
 
       def pipe

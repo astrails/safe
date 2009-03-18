@@ -32,8 +32,8 @@ module Astrails
       config = Config::Node.new(&block)
       #config.dump
 
-      Astrails::Safe::Mysqldump.run(config[:mysqldump, :databases], timestamp)
-      Astrails::Safe::Archive.run(config[:tar, :archives], timestamp)
+      Astrails::Safe::Mysqldump.run(config[:mysqldump, :databases])
+      Astrails::Safe::Archive.run(config[:tar, :archives])
 
       Astrails::Safe::TmpFile.cleanup
     end

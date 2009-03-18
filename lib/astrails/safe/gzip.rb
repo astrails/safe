@@ -2,6 +2,10 @@ module Astrails
   module Safe
     class Gzip < Pipe
 
+      def compressed?
+        true
+      end
+
       protected
 
       def pipe

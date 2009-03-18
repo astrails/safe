@@ -2,8 +2,8 @@ module Astrails
   module Safe
     class Source < Command
 
-      def initialize(id, config, timestamp)
-        @id, @config, @timestamp = id, config, timestamp
+      def initialize(id, config)
+        @id, @config = id, config
       end
 
       def filename
@@ -11,15 +11,15 @@ module Astrails
       end
 
       # process each config key as source (with full pipe)
-      def self.run(config, timestamp)
+      def self.run(config)
         unless config
           puts "No configuration found for #{kind}"
           return
         end
 
         config.each do |key, value|
-          stream = [Gpg, Gzip, Local, S3].inject(new(key, value, timestamp)) do |res, klass|
-          klass.new(res)
+          stream = [Gpg, Gzip, Local, S3].inject(new(key, value)) do |res, klass|
+            klass.new(res)
           end
           stream.run
         end
