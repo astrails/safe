@@ -1,6 +1,6 @@
 module Astrails
   module Safe
-    class Source < Command
+    class Source < Stream
 
       def initialize(id, config)
         @id, @config = id, config

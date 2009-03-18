@@ -18,19 +18,6 @@ module Astrails
         @path ||= File.join(prefix, filename)
       end
 
-      def store
-        return @store if @store
-
-        @store = [*(config[:store] || [:local])]
-
-        unsupported = @store - [:local, :s3]
-        raise(RuntimeError, "invalid storage engine: #{unsupported.inspect}") unless unsupported.empty?
-
-        raise(RuntimeError, "Need at least one storage (:local or :s3)") if @store.empty?
-
-        @store
-      end
-
       # call block on files to be removed (all except for the LAST 'limit' files
       def cleanup_with_limit(files, limit, &block)
         return unless files.size > limit

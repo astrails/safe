@@ -5,7 +5,6 @@ require 'astrails/safe/config/node'
 require 'astrails/safe/config/builder'
 
 require 'astrails/safe/stream'
-require 'astrails/safe/command'
 
 require 'astrails/safe/source'
 require 'astrails/safe/mysqldump'

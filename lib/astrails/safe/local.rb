@@ -11,7 +11,9 @@ module Astrails
       protected
 
       def active?
-        store.include?(:local)
+        # S3 can't upload from pipe. it needs to know file size, so we must pass through :local
+        # will change once we add SSH sink
+        true
       end
 
       def prefix

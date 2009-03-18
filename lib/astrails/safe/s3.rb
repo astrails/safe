@@ -5,7 +5,7 @@ module Astrails
       protected
 
       def active?
-        store.include?(:s3)
+        bucket && key && secret
       end
 
       def prefix
@@ -13,8 +13,6 @@ module Astrails
       end
 
       def save
-        raise(RuntimeError, "missing S3 params") unless bucket && key && secret
-
         # needed in cleanup even on dry run
         AWS::S3::Base.establish_connection!(:access_key_id => key, :secret_access_key => secret, :use_ssl => true) unless $LOCAL
 

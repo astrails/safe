@@ -10,11 +10,6 @@ safe do
     path "/backup/:kind/"
   end
 
-  # where to store the backups
-  # if you don't provide :local, it will be directly uploaded to S3
-  store [:local]
-  # store [:local, :s3]
-
   ## uncomment to enable uploads to Amazon S3
   ## Amazon S3 auth (optional)
   ## don't forget to add :s3 to the 'store' list

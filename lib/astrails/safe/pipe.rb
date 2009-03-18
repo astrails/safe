@@ -1,6 +1,6 @@
 module Astrails
   module Safe
-    class Pipe < Command
+    class Pipe < Stream
 
       def command
         "#{@parent.command}#{pipe}"
