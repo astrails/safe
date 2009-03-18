@@ -1,19 +1,43 @@
 module Astrails
   module Safe
-    class Local < Storage
+    class Local < Sink
 
-      def run
-        @stream.run
-        cleanup
+      def open(&block)
+        return @parent.open(&block) unless active?
+        run
+        File.open(path, &block) unless $DRY_RUN
+      end
+
+      protected
+
+      def active?
+        store.include?(:local)
+      end
+
+      def prefix
+        @prefix ||= File.expand_path(expand(@config[:local, :path] || raise(RuntimeError, "missing :local/:path in configuration")))
+      end
+
+      def command
+        "#{@parent.command} > #{path}"
+      end
+
+      def save
+        puts "command: #{command}" if $_VERBOSE
+        unless $DRY_RUN
+          FileUtils.mkdir_p(prefix) unless File.directory?(prefix)
+          system command
+        end
       end
 
       def cleanup
         return unless keep = @config[:keep, :local]
 
-        dir = File.dirname(filename)
         base = File.basename(filename).split(".").first
 
-        files = Dir[File.join(dir, "#{base}*")] .
+        pattern = File.join(prefix, "#{base}*")
+        puts "listing files #{pattern.inspect}" if $_VERBOSE
+        files = Dir[pattern] .
           select{|f| File.file?(f)} .
           sort
 

@@ -2,64 +2,44 @@ module Astrails
   module Safe
     class Stream
 
-      attr_accessor :config, :command, :filename
-      def initialize(config, command, filename)
-        @config, @command, @filename = config, command, filename
+      def initialize(parent)
+        @parent = parent
       end
 
-      def run
-        encrypt || compress # use gpg or gzip
-        redirect
-        execute
+      def id
+        @id ||= @parent.id
       end
 
-      private
-
-      def gpg_password_file(pass)
-        Astrails::Safe::TmpFile.create("gpg-pass") { |file| file.write(pass) }
+      def config
+        @config ||= @parent.config
       end
 
-      def encrypt
-
-        password = @config[:gpg, :password]
-        key      = @config[:gpg, :key]
-
-        return false unless key || password
-
-        if key
-          rise RuntimeError, "can't use both gpg password and pubkey" if password
-
-          @filename << ".gpg"
-          @command << "|gpg -e -r #{key}"
-        else
-          @filename << ".gpg"
-          unless $DRY_RUN
-            @command << "|gpg -c --passphrase-file #{gpg_password_file(password)}"
-          else
-            @command << "|gpg -c --passphrase-file TEMP_GENERATED_FILENAME"
-          end
-        end
-        true
+      def filename
+        @parent.filename
       end
 
-      def compress
-        @filename << ".gz"
-        @command << "|gzip"
+      def compressed?
+        @parent && @parent.compressed?
       end
 
-      def redirect
-        @command << ">" << @filename
+      protected
+
+      def name
+        self.class.name.split('::').last.downcase
       end
 
-      def execute
-        dir = File.dirname(filename)
-        FileUtils.mkdir_p(dir) unless File.directory?(dir) || $DRY_RUN
+      def kind
+        @parent ? @parent.kind : name
+      end
 
-        # EXECUTE
-        puts "Backup command: #{@command}" if $DRY_RUN || $_VERBOSE
-        system @command unless $DRY_RUN
+      def expand(path)
+        path .
+          gsub(/:kind\b/, kind) .
+          gsub(/:id\b/, id) .
+          gsub(/:timestamp\b/, timestamp)
       end
 
     end
   end
 end
+

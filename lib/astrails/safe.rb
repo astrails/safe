@@ -1,11 +1,24 @@
 require 'extensions/mktmpdir'
 require 'astrails/safe/tmp_file'
+
 require 'astrails/safe/config/node'
 require 'astrails/safe/config/builder'
+
 require 'astrails/safe/stream'
-require 'astrails/safe/engine'
+require 'astrails/safe/command'
+
+require 'astrails/safe/source'
 require 'astrails/safe/mysqldump'
 require 'astrails/safe/archive'
+
+require 'astrails/safe/pipe'
+require 'astrails/safe/gpg'
+require 'astrails/safe/gzip'
+
+require 'astrails/safe/sink'
+require 'astrails/safe/local'
+require 'astrails/safe/s3'
+
 
 module Astrails
   module Safe
@@ -21,6 +34,7 @@ module Astrails
 
       Astrails::Safe::Mysqldump.run(config[:mysqldump, :databases], timestamp)
       Astrails::Safe::Archive.run(config[:tar, :archives], timestamp)
+
       Astrails::Safe::TmpFile.cleanup
     end
   end

@@ -1,25 +1,29 @@
 safe do
-  # backup file path (full, including filename)
-  # Note: do not include .tar, .sql, .gz or .pgp, it will be added automatically
+
+  # backup file path (not including filename)
   # supported substitutions:
   #   :kind -> backup 'engine' kind, e.g. "mysqldump" or "archive"
   #   :id -> backup 'id', e.g. "blog", "production", etc.
   #   :timestamp -> current run timestamp (same for all the backups in the same 'run')
   # you can set separate :path for all backups (or once globally here)
-  path "/backup/:kind/:id-:timestamp"
+  local do
+    path "/backup/:kind/"
+  end
 
   # where to store the backups
   # if you don't provide :local, it will be directly uploaded to S3
-  store [:local, :s3]
+  store [:local]
+  # store [:local, :s3]
 
   ## uncomment to enable uploads to Amazon S3
   ## Amazon S3 auth (optional)
+  ## don't forget to add :s3 to the 'store' list
   # s3 do
   #   key YOUR_S3_KEY
   #   secret YOUR_S3_SECRET
   #   bucket S3_BUCKET
-  #   # prefix for uploads to S3. supports same substitution like :path
-  #   prefix ":kind/:id" # this is default
+  #   # path for uploads to S3. supports same substitution like :local/:path
+  #   path ":kind/" # this is default
   # end
 
   ## alternative style:

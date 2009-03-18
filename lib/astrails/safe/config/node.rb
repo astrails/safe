@@ -3,6 +3,7 @@ module Astrails
   module Safe
     module Config
       class Node
+        attr_reader :parent
         def initialize(parent = nil, data = {}, &block)
           @parent, @data = parent, {}
           data.each { |k, v| self[k] = v }
@@ -40,6 +41,14 @@ module Astrails
           @data.each(&block)
         end
         include Enumerable
+
+        def to_hash
+          @data.keys.inject({}) do |res, key|
+            value = @data[key]
+            res[key] = value.is_a?(Node) ? value.to_hash : value
+            res
+          end
+        end
 
         def dump(indent = "")
           @data.each do |key, value|
