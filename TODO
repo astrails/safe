@@ -1,0 +1,8 @@
+- support percona XtraBackup as an option instead of mysqldump [patches anyone :) ?]
+- backup validation:
+  - support for 'minsize' opition in backup that will check that produced backup is at least the expected size
+    this should catch many backup failure scenarious (like broken mysql connection, insufficient disk space etc.
+- support differencial backups
+  - it should be fairly easy for filesystem backups using tar's built in incremental functionality.
+  - for mysql need to use XtraBackup
+  - or we can keep the previous dump locally and store only diff with the latest dump
