@@ -72,28 +72,28 @@ The procedure to create and transfer the key is as follows:
    no way to know its yours and can be trusted.
    To fix that we can sign it with other trusted key, or just directly modify its
    trust level in gpg (use level 5):
-
-<pre>
-   $ gpg --edit-key test@example.com
-   ...
-   Command> trust
-   ...
-   1 = I don't know or won't say
-   2 = I do NOT trust
-   3 = I trust marginally
-   4 = I trust fully
-   5 = I trust ultimately
-   m = back to the main menu
-
-   Your decision? 5
-   ...
-   Command> quit
-</pre>
+   <pre>
+     $ gpg --edit-key test@example.com
+     ...
+     Command> trust
+     ...
+     1 = I don't know or won't say
+     2 = I do NOT trust
+     3 = I trust marginally
+     4 = I trust fully
+     5 = I trust ultimately
+     m = back to the main menu
+     
+     Your decision? 5
+     ...
+     Command> quit
+   </pre>
 
 6. export your secret key for backup
    (we recommend to print it on paper and burn to a CD/DVD and store in a safe place):
-
-   > gpg -a --export-secret-key test@example.com > test@example.com.key
+   <pre>
+   $ gpg -a --export-secret-key test@example.com > test@example.com.key
+   </pre>
 
 
 Example configuration
