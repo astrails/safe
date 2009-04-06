@@ -1,3 +1,5 @@
+- handle errors from mysqldump
+- check that gpg is installed
 - support percona XtraBackup as an option instead of mysqldump [patches anyone :) ?]
 - backup validation:
   - support for 'minsize' opition in backup that will check that produced backup is at least the expected size
