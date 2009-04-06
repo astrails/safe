@@ -1,0 +1,7 @@
+= safe
+
+Description goes here.
+
+== Copyright
+
+Copyright (c) 2009 astrails. See LICENSE for details.

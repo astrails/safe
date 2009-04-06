@@ -1,1 +1,5 @@
-config.rb
+*.sw?
+.DS_Store
+coverage
+rdoc
+pkg
