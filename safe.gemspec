@@ -35,7 +35,8 @@ Gem::Specification.new do |s|
     "lib/astrails/safe/source.rb",
     "lib/astrails/safe/stream.rb",
     "lib/astrails/safe/tmp_file.rb",
-    "lib/extensions/mktmpdir.rb"
+    "lib/extensions/mktmpdir.rb",
+    "templates/script.rb"
   ]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/astrails/safe}

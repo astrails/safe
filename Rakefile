@@ -10,6 +10,7 @@ begin
     gem.email = "we@astrails.com"
     gem.homepage = "http://github.com/astrails/safe"
     gem.authors  = ["Astrails Ltd."]
+    gem.files = FileList["[A-Z]*.*", "{bin,examples,generators,lib,rails,spec,test,templates}/**/*", 'Rakefile', 'LICENSE*']
 
     gem.add_dependency("aws-s3")
 
