@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{safe}
-  s.version = "0.1.4"
+  s.version = "0.1.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Astrails Ltd."]
-  s.date = %q{2009-04-06}
+  s.date = %q{2009-04-12}
   s.default_executable = %q{astrails-safe}
   s.description = %q{Simple tool to backup MySQL databases and filesystem locally or to Amazon S3 (with optional encryption)}
   s.email = %q{we@astrails.com}
@@ -21,6 +21,10 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION.yml",
     "bin/astrails-safe",
+    "examples/example_helper.rb",
+    "examples/integration/mysqldump_flow_example.rb",
+    "examples/unit/config_example.rb",
+    "examples/unit/stream_example.rb",
     "lib/astrails/safe.rb",
     "lib/astrails/safe/archive.rb",
     "lib/astrails/safe/config/builder.rb",
@@ -44,6 +48,12 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.1}
   s.summary = %q{Backup filesystem and MySQL to Amazon S3 (with encryption)}
+  s.test_files = [
+    "examples/integration/mysqldump_flow_example.rb",
+    "examples/example_helper.rb",
+    "examples/unit/stream_example.rb",
+    "examples/unit/config_example.rb"
+  ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
