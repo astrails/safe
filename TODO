@@ -1,3 +1,4 @@
+- add 'silent'
 - handle errors from mysqldump
 - check that gpg is installed
 - support percona XtraBackup as an option instead of mysqldump [patches anyone :) ?]

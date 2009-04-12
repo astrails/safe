@@ -4,7 +4,7 @@ module Astrails
       class Builder
         COLLECTIONS = %w/database archive/
         ITEMS = %w/s3 key secret bucket path gpg password keep local mysqldump options
-        user socket tar files exclude filename/
+        user host port socket skip_tables tar files exclude filename/
         NAMES = COLLECTIONS + ITEMS
         def initialize(node)
           @node = node
@@ -22,6 +22,8 @@ module Astrails
           unless args.first.is_a?(Hash)
             id_or_value = args.shift # nil for args == []
           end
+
+          id_or_value = id_or_value.map {|v| v.to_s} if id_or_value.is_a?(Array)
 
           # do we have data hash?
           if data = args.shift
