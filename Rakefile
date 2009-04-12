@@ -20,28 +20,20 @@ rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end
 
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/*_test.rb'
-  test.verbose = true
+require 'micronaut/rake_task'
+Micronaut::RakeTask.new(:examples) do |examples|
+  examples.pattern = 'examples/**/*_example.rb'
+  examples.ruby_opts << '-Ilib -Iexamples'
 end
 
-begin
-  require 'rcov/rcovtask'
-  Rcov::RcovTask.new do |test|
-    test.libs << 'test'
-    test.pattern = 'test/**/*_test.rb'
-    test.verbose = true
-  end
-rescue LoadError
-  task :rcov do
-    abort "RCov is not available. In order to run rcov, you must: sudo gem install spicycode-rcov"
-  end
+Micronaut::RakeTask.new(:rcov) do |examples|
+  examples.pattern = 'examples/**/*_example.rb'
+  examples.rcov_opts = '-Ilib -Iexamples'
+  examples.rcov = true
 end
 
 
-task :default => :test
+task :default => :examples
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|
