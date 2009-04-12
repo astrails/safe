@@ -24,12 +24,12 @@ module Astrails
 
       protected
 
-      def name
-        self.class.name.split('::').last.downcase
+      def self.human_name
+        name.split('::').last.downcase
       end
 
       def kind
-        @parent ? @parent.kind : name
+        @parent ? @parent.kind : self.class.human_name
       end
 
       def expand(path)

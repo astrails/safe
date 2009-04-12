@@ -13,7 +13,7 @@ module Astrails
       # process each config key as source (with full pipe)
       def self.run(config)
         unless config
-          puts "No configuration found for #{kind}"
+          puts "No configuration found for #{human_name}"
           return
         end
 
