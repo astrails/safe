@@ -18,6 +18,8 @@ require 'astrails/safe/sink'
 require 'astrails/safe/local'
 require 'astrails/safe/s3'
 
+require 'astrails/safe/svn'
+
 
 module Astrails
   module Safe
