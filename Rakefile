@@ -20,17 +20,17 @@ rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end
 
-# require 'micronaut/rake_task'
-# Micronaut::RakeTask.new(:examples) do |examples|
-#   examples.pattern = 'examples/**/*_example.rb'
-#   examples.ruby_opts << '-Ilib -Iexamples'
-# end
-# 
-# Micronaut::RakeTask.new(:rcov) do |examples|
-#   examples.pattern = 'examples/**/*_example.rb'
-#   examples.rcov_opts = '-Ilib -Iexamples'
-#   examples.rcov = true
-# end
+require 'micronaut/rake_task'
+Micronaut::RakeTask.new(:examples) do |examples|
+  examples.pattern = 'examples/**/*_example.rb'
+  examples.ruby_opts << '-Ilib -Iexamples'
+end
+
+Micronaut::RakeTask.new(:rcov) do |examples|
+  examples.pattern = 'examples/**/*_example.rb'
+  examples.rcov_opts = '-Ilib -Iexamples'
+  examples.rcov = true
+end
 
 
 task :default => :examples

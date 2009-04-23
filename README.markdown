@@ -136,6 +136,12 @@ Example configuration
 
     end
 
+    svndump do
+      repo :my_repo do
+        repo_path "/home/svn/my_repo"
+      end
+    end
+
     tar do
       archive "git-repositories", :files => "/home/git/repositories"
       archive "dot-configs",      :files => "/home/*/.[^.]*"
