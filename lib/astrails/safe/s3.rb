@@ -9,31 +9,29 @@ module Astrails
       end
 
       def prefix
-        @prefix ||= expand(config[:s3, :path] || expand(config[:local, :path] || ":kind/:id"))
+        @prefix ||= expand(config[:s3, :path] || config[:local, :path] || ":kind/:id")
       end
 
       def save
+        raise RuntimeError, "pipe-streaming not supported for S3." unless @backup.path
+
         # needed in cleanup even on dry run
         AWS::S3::Base.establish_connection!(:access_key_id => key, :secret_access_key => secret, :use_ssl => true) unless $LOCAL
 
-        file = @parent.open
         puts "Uploading #{bucket}:#{path}" if $_VERBOSE || $DRY_RUN
         unless $DRY_RUN || $LOCAL
           AWS::S3::Bucket.create(bucket)
-          AWS::S3::S3Object.store(path, file, bucket)
+          File.open(@backup.path) do |file|
+            AWS::S3::S3Object.store(path, file, bucket)
+          end
           puts "...done" if $_VERBOSE
         end
-        file.close if file
-
       end
 
       def cleanup
-
         return if $LOCAL
 
         return unless keep = @config[:keep, :s3]
-
-        bucket = @config[:s3, :bucket]
 
         base = File.basename(filename).split(".").first
 
@@ -52,15 +50,15 @@ module Astrails
       end
 
       def bucket
-        config[:s3, :bucket]
+        @config[:s3, :bucket]
       end
 
       def key
-        config[:s3, :key]
+        @config[:s3, :key]
       end
 
       def secret
-        config[:s3, :secret]
+        @config[:s3, :secret]
       end
 
     end

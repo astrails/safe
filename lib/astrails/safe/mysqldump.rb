@@ -3,7 +3,7 @@ module Astrails
     class Mysqldump < Source
 
       def command
-        @commanbd ||= "mysqldump --defaults-extra-file=#{mysql_password_file} #{@config[:options]} #{mysql_skip_tables} #{@id}"
+        "mysqldump --defaults-extra-file=#{mysql_password_file} #{@config[:options]} #{mysql_skip_tables} #{@id}"
       end
 
       def extension; '.sql'; end

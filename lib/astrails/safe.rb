@@ -1,10 +1,19 @@
+require "aws/s3"
+require 'fileutils'
+
+require 'tempfile'
 require 'extensions/mktmpdir'
+
 require 'astrails/safe/tmp_file'
 
 require 'astrails/safe/config/node'
 require 'astrails/safe/config/builder'
 
 require 'astrails/safe/stream'
+
+require 'astrails/safe/backup'
+
+require 'astrails/safe/backup'
 
 require 'astrails/safe/source'
 require 'astrails/safe/mysqldump'
@@ -23,16 +32,21 @@ module Astrails
   module Safe
     ROOT = File.join(File.dirname(__FILE__), "..", "..")
 
-    def timestamp
-      @timestamp ||= Time.now.strftime("%y%m%d-%H%M")
-    end
-
     def safe(&block)
       config = Config::Node.new(&block)
       #config.dump
 
-      Astrails::Safe::Mysqldump.run(config[:mysqldump, :databases])
-      Astrails::Safe::Archive.run(config[:tar, :archives])
+      if databases = config[:mysqldump, :databases]
+        databases.each do |name, config|
+          Astrails::Safe::Mysqldump.new(name, config).backup.run(config, :gpg, :gzip, :local, :s3)
+        end
+      end
+
+      if archives = config[:tar, :archives]
+        archives.each do |name, config|
+          Astrails::Safe::Archive.new(name, config).backup.run(config, :gpg, :gzip, :local, :s3)
+        end
+      end
 
       Astrails::Safe::TmpFile.cleanup
     end

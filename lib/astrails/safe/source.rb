@@ -2,27 +2,42 @@ module Astrails
   module Safe
     class Source < Stream
 
+      attr_accessor :id
       def initialize(id, config)
-        @id, @config = id, config
+        @id, @config = id.to_s, config
+      end
+
+      def timestamp
+        Time.now.strftime("%y%m%d-%H%M")
+      end
+
+      def kind
+        self.class.human_name
       end
 
       def filename
-        @filename ||= expand(":kind-:id.:timestamp#{extension}")
+        @filename ||= expand(":kind-:id.:timestamp")
       end
 
-      # process each config key as source (with full pipe)
-      def self.run(config)
-        unless config
-          puts "No configuration found for #{human_name}"
-          return
-        end
+      def backup
+        return @backup if @backup
+        @backup = Backup.new(
+          :id        => @id,
+          :kind      => kind,
+          :extension => extension,
+          :command   => command,
+          :timestamp => timestamp
+        )
+        # can't do this in the initializer hash above since
+        # filename() calls expand() which requires @backup
+        @backup.filename = filename
+        @backup
+      end
 
-        config.each do |key, value|
-          stream = [Gpg, Gzip, Local, S3].inject(new(key, value)) do |res, klass|
-            klass.new(res)
-          end
-          stream.run
-        end
+      protected
+
+      def self.human_name
+        name.split('::').last.downcase
       end
 
     end

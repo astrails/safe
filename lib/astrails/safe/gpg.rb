@@ -2,15 +2,14 @@ module Astrails
   module Safe
     class Gpg < Pipe
 
-      def compressed?
-        active? || @parent.compressed?
-      end
-
       protected
+
+      def post_process
+        @backup.compressed = true
+      end
 
       def pipe
         if key
-          rise RuntimeError, "can't use both gpg password and pubkey" if password
           "|gpg -e -r #{key}"
         elsif password
           "|gpg -c --passphrase-file #{gpg_password_file(password)}"
@@ -18,19 +17,23 @@ module Astrails
       end
 
       def extension
-        ".gpg" if active?
+        ".gpg"
       end
 
       def active?
+        raise RuntimeError, "can't use both gpg password and pubkey" if key && password
+
         password || key
       end
 
+      private
+
       def password
-        @password ||= config[:gpg, :password]
+        @password ||= @config[:gpg, :password]
       end
 
       def key
-        @key ||= config[:gpg, :key]
+        @key ||= @config[:gpg, :key]
       end
 
       def gpg_password_file(pass)

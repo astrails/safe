@@ -2,44 +2,18 @@ module Astrails
   module Safe
     class Stream
 
-      def initialize(parent)
-        @parent = parent
-      end
-
-      def id
-        @id ||= @parent.id
-      end
-
-      def config
-        @config ||= @parent.config
-      end
-
-      def filename
-        @parent.filename
-      end
-
-      def compressed?
-        @parent && @parent.compressed?
-      end
-
-      protected
-
-      def self.human_name
-        name.split('::').last.downcase
-      end
-
-      def kind
-        @parent ? @parent.kind : self.class.human_name
+      attr_accessor :config, :backup
+      def initialize(config, backup)
+        @config, @backup = config, backup
       end
 
       def expand(path)
         path .
-          gsub(/:kind\b/, kind) .
-          gsub(/:id\b/, id) .
-          gsub(/:timestamp\b/, timestamp)
+        gsub(/:kind\b/, @backup.kind.to_s) .
+        gsub(/:id\b/, @backup.id.to_s) .
+        gsub(/:timestamp\b/, @backup.timestamp)
       end
 
     end
   end
 end
-

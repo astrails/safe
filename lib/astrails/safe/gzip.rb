@@ -2,22 +2,22 @@ module Astrails
   module Safe
     class Gzip < Pipe
 
-      def compressed?
-        true
-      end
-
       protected
 
+      def post_process
+        @backup.compressed = true
+      end
+
       def pipe
-        "|gzip" if active?
+        "|gzip"
       end
 
       def extension
-        ".gz" if active?
+        ".gz"
       end
 
       def active?
-        !@parent.compressed?
+        !@backup.compressed
       end
 
     end

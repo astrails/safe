@@ -16,7 +16,7 @@ module Astrails
 
       def tar_files
         raise RuntimeError, "missing files for tar" unless @config[:files]
-        [*@config[:files]] * " "
+        [*@config[:files]].map {|s| s.strip} * " "
       end
 
     end

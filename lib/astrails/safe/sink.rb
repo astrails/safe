@@ -2,20 +2,18 @@ module Astrails
   module Safe
     class Sink < Stream
 
-      def run
-        if active?
-          save
-          cleanup
-        else
-          @parent.run
-        end
+      def process
+        return unless active?
+
+        save
+        cleanup
       end
 
       protected
 
       # prefix is defined in subclass
       def path
-        @path ||= File.join(prefix, filename)
+        @path ||= File.join(prefix, @backup.filename) + @backup.extension
       end
 
       # call block on files to be removed (all except for the LAST 'limit' files
@@ -26,8 +24,6 @@ module Astrails
         # TODO: validate here
         to_remove.each(&block)
       end
-
     end
   end
 end
-

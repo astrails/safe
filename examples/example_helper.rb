@@ -16,4 +16,3 @@ Micronaut.configure do |c|
   c.filter_run :focused => true
   c.mock_with :rr
 end
-

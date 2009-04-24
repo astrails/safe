@@ -120,7 +120,5 @@ describe Astrails::Safe::Config do
     }
 
     config.to_hash.should == expected
-
   end
 end
-

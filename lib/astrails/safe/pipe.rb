@@ -1,15 +1,13 @@
 module Astrails
   module Safe
     class Pipe < Stream
+      def process
+        return unless active?
 
-      def command
-        "#{@parent.command}#{pipe}"
+        @backup.command << pipe
+        @backup.extension << extension
+        post_process
       end
-
-      def filename
-        "#{@parent.filename}#{extension}"
-      end
-
     end
   end
 end

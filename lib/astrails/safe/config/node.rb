@@ -60,7 +60,6 @@ module Astrails
             end
           end
         end
-
       end
     end
   end

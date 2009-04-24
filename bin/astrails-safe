@@ -1,11 +1,6 @@
 #!/usr/bin/env ruby
 
-
-require 'tempfile'
 require 'rubygems'
-require 'fileutils'
-require "aws/s3"
-require 'yaml'
 
 #require 'ruby-debug'
 #$:.unshift File.join(File.dirname(__FILE__), "..", "lib")
@@ -51,7 +46,6 @@ def main
 
     die "Created default #{$CONFIG_FILE_NAME}. Please edit and run again."
   end
-
 
   load($CONFIG_FILE_NAME)
 end
