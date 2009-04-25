@@ -1,7 +1,7 @@
 astrails-safe
 =============
 
-Simple mysql and filesystem backups with S3 support (with optional encryption)
+Simple database and filesystem backups with S3 support (with optional encryption)
 
 Motivation
 ----------
@@ -12,6 +12,7 @@ We needed a backup solution that will satisfy the following requirements:
 * simple to install and configure
 * support for simple ‘tar’ backups of directories (with includes/excludes)
 * support for simple mysqldump of mysql databases
+* support for simple pg_dump of PostgreSQL databases
 * support for symmetric or public key encryption
 * support for local filesystem and Amazon S3 for storage
 * support for backup rotation. we don’t want backups filling all the diskspace or cost a fortune on S3
@@ -62,7 +63,7 @@ The procedure to create and transfer the key is as follows:
 
 4. import public key on the remote system:
 <pre>
-   $ gpg --import test@example.com.pub 
+   $ gpg --import test@example.com.pub
    gpg: key 45CA9403: public key "Test Backup <test@example.com>" imported
    gpg: Total number processed: 1
    gpg:               imported: 1
@@ -83,7 +84,7 @@ The procedure to create and transfer the key is as follows:
      4 = I trust fully
      5 = I trust ultimately
      m = back to the main menu
-     
+
      Your decision? 5
      ...
      Command> quit
@@ -134,6 +135,16 @@ Example configuration
       database :astrails_com
       database :secret_project_com
 
+    end
+
+    pgdump do
+      options "-i -x -O"   # -i => ignore version, -x => do not dump privileges (grant/revoke), -O => skip restoration of object ownership in plain text format
+
+      user "username"
+      password "............"  # shouldn't be used, instead setup ident.  Current functionality exports a password env to the shell which pg_dump uses - untested!
+
+      database :blog
+      database :stateofflux_com
     end
 
     tar do

@@ -1,6 +1,55 @@
 require File.expand_path(File.dirname(__FILE__) + '/../example_helper')
 
 describe Astrails::Safe::Config do
+  it "pgdump" do
+    config = Astrails::Safe::Config::Node.new do
+      local do
+        path "path"
+      end
+
+      pgdump do
+        # `pg_dump -U "#{abcs[RAILS_ENV]["username"]}" -i -x -O  #{abcs[RAILS_ENV]["database"]} -f db/#{filename}`
+        options "-i -x -O"
+
+        user "astrails"
+        password ""
+        host "localhost"
+        port 5432
+
+        database :blog
+
+        database :production do
+          keep :local => 3
+
+          skip_tables [:logger_exceptions, :request_logs]
+        end
+
+      end
+    end
+
+    expected = {
+      "local" => {"path" => "path"},
+
+      "pgdump" => {
+        "options" => "-i -x -O",
+        "user" => "astrails",
+        "password" => "",
+        "host" => "localhost",
+        "port" => 5432,
+
+        "databases" => {
+          "blog" => {},
+          "production" => {
+           "keep" => {"local" => 3},
+            "skip_tables" => ["logger_exceptions", "request_logs"],
+          },
+        },
+      }
+    }
+
+    config.to_hash.should == expected
+  end
+
   it "foo" do
     config = Astrails::Safe::Config::Node.new do
       local do

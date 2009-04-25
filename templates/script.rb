@@ -72,6 +72,19 @@ safe do
 
   end
 
+  # # uncomment to enable
+  # # backup PostgreSQL databases with pg_dump
+  # pgdump do
+  #   option "-i -x -O"
+  #
+  #   user "markmansour"
+  #   # password "" - leave this out if you have ident setup
+  #
+  #   # database is a 'collection' element. it must have a hash or block parameter
+  #   # it will be 'collected' in a 'databases', with database id (1st arg) used as hash key
+  #   database :blog
+  #   database :production
+  # end
 
   tar do
     # 'archive' is a collection item, just like 'database'

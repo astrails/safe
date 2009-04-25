@@ -8,6 +8,7 @@ require 'astrails/safe/stream'
 
 require 'astrails/safe/source'
 require 'astrails/safe/mysqldump'
+require 'astrails/safe/pgdump'
 require 'astrails/safe/archive'
 
 require 'astrails/safe/pipe'
@@ -32,6 +33,7 @@ module Astrails
       #config.dump
 
       Astrails::Safe::Mysqldump.run(config[:mysqldump, :databases])
+      Astrails::Safe::Pgdump.run(config[:pgdump, :databases])
       Astrails::Safe::Archive.run(config[:tar, :archives])
 
       Astrails::Safe::TmpFile.cleanup
