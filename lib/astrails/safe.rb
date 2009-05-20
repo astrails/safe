@@ -17,6 +17,7 @@ require 'astrails/safe/backup'
 
 require 'astrails/safe/source'
 require 'astrails/safe/mysqldump'
+require 'astrails/safe/pgdump'
 require 'astrails/safe/archive'
 require 'astrails/safe/svndump'
 
@@ -40,6 +41,12 @@ module Astrails
       if databases = config[:mysqldump, :databases]
         databases.each do |name, config|
           Astrails::Safe::Mysqldump.new(name, config).backup.run(config, :gpg, :gzip, :local, :s3)
+        end
+      end
+
+      if databases = config[:pgdump, :databases]
+        databases.each do |name, config|
+          Astrails::Safe::Pgdump.new(name, config).backup.run(config, :gpg, :gzip, :local, :s3)
         end
       end
 

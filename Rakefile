@@ -5,11 +5,11 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "safe"
-    gem.summary = %Q{Backup filesystem and MySQL to Amazon S3 (with encryption)}
-    gem.description = "Simple tool to backup MySQL databases and filesystem locally or to Amazon S3 (with optional encryption)"
+    gem.summary = %Q{Backup filesystem and databases (MySQL and PostgreSQL) to Amazon S3 (with encryption)}
+    gem.description = "Simple tool to backup databases (MySQL and PostgreSQL) and filesystem locally or to Amazon S3 (with optional encryption)"
     gem.email = "we@astrails.com"
     gem.homepage = "http://github.com/astrails/safe"
-    gem.authors  = ["Astrails Ltd."]
+    gem.authors  = ["Astrails Ltd.", "Mark Mansour"]
     gem.files = FileList["[A-Z]*.*", "{bin,examples,generators,lib,rails,spec,test,templates}/**/*", 'Rakefile', 'LICENSE*']
 
     gem.add_dependency("aws-s3")
