@@ -38,27 +38,16 @@ module Astrails
       config = Config::Node.new(&block)
       #config.dump
 
-      if databases = config[:mysqldump, :databases]
-        databases.each do |name, config|
-          Astrails::Safe::Mysqldump.new(name, config).backup.run(config, :gpg, :gzip, :local, :s3)
-        end
-      end
 
-      if databases = config[:pgdump, :databases]
-        databases.each do |name, config|
-          Astrails::Safe::Pgdump.new(name, config).backup.run(config, :gpg, :gzip, :local, :s3)
-        end
-      end
-
-      if archives = config[:tar, :archives]
-        archives.each do |name, config|
-          Astrails::Safe::Archive.new(name, config).backup.run(config, :gpg, :gzip, :local, :s3)
-        end
-      end
-
-      if repos = config[:svndump, :repos]
-        repos.each do |name, config|
-          Astrails::Safe::Svndump.new(name, config).backup.run(config, :gpg, :gzip, :local, :s3)
+      [[Astrails::Safe::Mysqldump, [:mysqldump, :databases]],
+       [Astrails::Safe::Pgdump, [:pgdump, :databases]],
+       [Astrails::Safe::Archive, [:tar, :archives]],
+       [Astrails::Safe::Svndump, [:svndump, :repos]]
+      ].each do |klass, path|
+        if collection = config[*path]
+          collection.each do |name, config|
+            klass.new(name, config).backup.run(config, :gpg, :gzip, :local, :s3)
+          end
         end
       end
 

@@ -7,44 +7,11 @@ describe Astrails::Safe::Config do
         path "path"
       end
 
-      pgdump do
-        # `pg_dump -U "#{abcs[RAILS_ENV]["username"]}" -i -x -O  #{abcs[RAILS_ENV]["database"]} -f db/#{filename}`
-        options "-i -x -O"
-
-        user "astrails"
-        password ""
-        host "localhost"
-        port 5432
-
-        database :blog
-
-        database :production do
-          keep :local => 3
-
-          skip_tables [:logger_exceptions, :request_logs]
-        end
-
-      end
     end
 
     expected = {
       "local" => {"path" => "path"},
 
-      "pgdump" => {
-        "options" => "-i -x -O",
-        "user" => "astrails",
-        "password" => "",
-        "host" => "localhost",
-        "port" => 5432,
-
-        "databases" => {
-          "blog" => {},
-          "production" => {
-           "keep" => {"local" => 3},
-            "skip_tables" => ["logger_exceptions", "request_logs"],
-          },
-        },
-      }
     }
 
     config.to_hash.should == expected
@@ -90,6 +57,24 @@ describe Astrails::Safe::Config do
           gpg do
             password "custom-production-pass"
           end
+
+          skip_tables [:logger_exceptions, :request_logs]
+        end
+
+      end
+
+      pgdump do
+        options "-i -x -O"
+
+        user "astrails"
+        password ""
+        host "localhost"
+        port 5432
+
+        database :blog
+
+        database :production do
+          keep :local => 3
 
           skip_tables [:logger_exceptions, :request_logs]
         end
@@ -155,6 +140,22 @@ describe Astrails::Safe::Config do
           "production" => {
            "keep" => {"local" => 3},
            "gpg" => {"password" => "custom-production-pass"},
+            "skip_tables" => ["logger_exceptions", "request_logs"],
+          },
+        },
+      },
+
+      "pgdump" => {
+        "options" => "-i -x -O",
+        "user" => "astrails",
+        "password" => "",
+        "host" => "localhost",
+        "port" => 5432,
+
+        "databases" => {
+          "blog" => {},
+          "production" => {
+           "keep" => {"local" => 3},
             "skip_tables" => ["logger_exceptions", "request_logs"],
           },
         },
