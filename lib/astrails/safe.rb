@@ -18,6 +18,7 @@ require 'astrails/safe/backup'
 require 'astrails/safe/source'
 require 'astrails/safe/mysqldump'
 require 'astrails/safe/archive'
+require 'astrails/safe/svndump'
 
 require 'astrails/safe/pipe'
 require 'astrails/safe/gpg'
@@ -45,6 +46,12 @@ module Astrails
       if archives = config[:tar, :archives]
         archives.each do |name, config|
           Astrails::Safe::Archive.new(name, config).backup.run(config, :gpg, :gzip, :local, :s3)
+        end
+      end
+
+      if repos = config[:svndump, :repos]
+        repos.each do |name, config|
+          Astrails::Safe::Svndump.new(name, config).backup.run(config, :gpg, :gzip, :local, :s3)
         end
       end
 
