@@ -10,9 +10,9 @@ module Astrails
 
       def pipe
         if key
-          "|gpg -e -r #{key}"
+          "|gpg #{@config[:options]} -e -r #{key}"
         elsif password
-          "|gpg -c --passphrase-file #{gpg_password_file(password)}"
+          "|gpg #{@config[:options]} -c --passphrase-file #{gpg_password_file(password)}"
         end
       end
 
