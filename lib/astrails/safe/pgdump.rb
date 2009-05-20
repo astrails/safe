@@ -3,9 +3,12 @@ module Astrails
     class Pgdump < Source
 
       def command
-        @commanbd ||= "pg_dump #{postgres_options} #{postgres_username} #{postgres_password} #{postgres_host} #{postgres_port} #{@id}"
-#        @commanbd ||= "pg_dump -U #{@config["user"]} #{@config[:option]} #{@config["database"]} -f #{filename}"
-#        @commanbd ||= "mysqldump --defaults-extra-file=#{mysql_password_file} #{@config[:options]} #{mysql_skip_tables} #{@id}"
+        if @config["password"]
+          ENV['PGPASSWORD'] = @config["password"]
+        else
+          ENV['PGPASSWORD'] = nil
+        end
+        "pg_dump #{postgres_options} #{postgres_username} #{postgres_host} #{postgres_port} #{@id}"
       end
 
       def extension; '.sql'; end
@@ -17,25 +20,15 @@ module Astrails
       end
 
       def postgres_host
-        @config["host"] ? "--host='#{@config["port"]}'" : ""
+        @config["host"] && "--host='#{@config["host"]}'"
       end
 
       def postgres_port
-        @config["port"] ? "--port='#{@config["port"]}'" : ""
+        @config["port"] && "--port='#{@config["port"]}'"
       end
 
       def postgres_username
-        @config["user"] ? "--username='#{@config["user"]}'" : ""
-      end
-
-      def postgres_password
-        `export PGPASSWORD=#{@config["password"]}` if @config["password"]
-      end
-
-      def postgres_skip_tables
-        if skip_tables = @config[:skip_tables]
-          [*skip_tables].map { |t| "--exclude-table=#{@id}.#{t}" } * " "
-        end
+        @config["user"] && "--username='#{@config["user"]}'"
       end
 
     end

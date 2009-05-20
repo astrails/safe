@@ -3,6 +3,8 @@ astrails-safe
 
 Simple database and filesystem backups with S3 support (with optional encryption)
 
+Home: github.com/astrails/safe
+
 Motivation
 ----------
 
@@ -12,12 +14,18 @@ We needed a backup solution that will satisfy the following requirements:
 * simple to install and configure
 * support for simple ‘tar’ backups of directories (with includes/excludes)
 * support for simple mysqldump of mysql databases
-* support for simple pg_dump of PostgreSQL databases
 * support for symmetric or public key encryption
 * support for local filesystem and Amazon S3 for storage
 * support for backup rotation. we don’t want backups filling all the diskspace or cost a fortune on S3
 
 And since we didn't find any, we wrote our own :)
+
+Note
+----
+
+Support for pg_dump and svndump was contributed but since I don't personally use them i don't have an easy
+way of testing it. So if you use Subversion or PostgreSQL please test the new functionality and report if
+there are any problems.
 
 Usage
 -----
@@ -170,6 +178,11 @@ Example configuration
     end
   end
 </pre>
+
+Reporting problems
+------------------
+
+http://github.com/astrails/safe/issues
 
 Copyright
 ---------
