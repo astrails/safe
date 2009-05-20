@@ -27,13 +27,13 @@ module Astrails
 
           # do we have data hash?
           if data = args.shift
-            die "#{sym}: hash expected: #{data.inspect}" unless data.is_a?(Hash)
+            raise "#{sym}: hash expected: #{data.inspect}" unless data.is_a?(Hash)
           end
 
           #puts "#{sym}: args=#{args.inspect}, id_or_value=#{id_or_value}, data=#{data.inspect}, block=#{block.inspect}"
 
-          die "#{sym}: unexpected: #{args.inspect}" unless args.empty?
-          die "#{sym}: missing arguments" unless id_or_value || data || block
+          raise "#{sym}: unexpected: #{args.inspect}" unless args.empty?
+          raise "#{sym}: missing arguments" unless id_or_value || data || block
 
           if COLLECTIONS.include?(sym.to_s) && id_or_value
             data ||= {}

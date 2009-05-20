@@ -12,7 +12,7 @@ module Astrails
         mods.each do |mod|
           mod = mod.to_s
           mod[0] = mod[0..0].upcase
-          self.class.const_get(mod).new(config, self).process
+          Astrails::Safe.const_get(mod).new(config, self).process
         end
       end
     end

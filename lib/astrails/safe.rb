@@ -50,6 +50,6 @@ module Astrails
 
       Astrails::Safe::TmpFile.cleanup
     end
+    module_function :safe
   end
 end
-

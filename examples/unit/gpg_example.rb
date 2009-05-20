@@ -103,7 +103,7 @@ describe Astrails::Safe::Gpg do
 
     describe "with key" do
       before(:each) do
-        @gpg = gpg(:gpg => {:key => "foo"})
+        @gpg = gpg(:gpg => {:key => "foo"}, :options => "OPT")
       end
 
       it "should not call gpg_password_file" do
@@ -111,19 +111,19 @@ describe Astrails::Safe::Gpg do
         @gpg.send(:pipe)
       end
 
-      it "should use '-r'" do
-        @gpg.send(:pipe).should == "|gpg -e -r foo"
+      it "should use '-r' and options" do
+        @gpg.send(:pipe).should == "|gpg OPT -e -r foo"
       end
     end
 
     describe "with password" do
       before(:each) do
-        @gpg = gpg(:gpg => {:password => "bar"})
+        @gpg = gpg(:gpg => {:password => "bar"}, :options => "OPT")
         stub(@gpg).gpg_password_file(anything) {"pass-file"}
       end
 
-      it "should use '--passphrase-file'" do
-        @gpg.send(:pipe).should == "|gpg -c --passphrase-file pass-file"
+      it "should use '--passphrase-file' and :options" do
+        @gpg.send(:pipe).should == "|gpg OPT -c --passphrase-file pass-file"
       end
     end
   end

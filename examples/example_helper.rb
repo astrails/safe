@@ -2,8 +2,9 @@ require 'rubygems'
 require 'micronaut'
 require 'ruby-debug'
 
+SAFE_ROOT = File.dirname(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH.unshift(File.join(SAFE_ROOT, 'lib'))
 
 require 'astrails/safe'
 
