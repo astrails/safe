@@ -110,15 +110,15 @@ describe Astrails::Safe::Config do
           },
         },
       },
-  
+
       "svndump" => {
-        "repos" => { 
+        "repos" => {
           "my_repo"=> {
             "repo_path" => "/home/svn/my_repo"
           }
         }
-      },  
-      
+      },
+
       "tar" => {
         "archives" => {
           "git-repositories" => {"files" => "/home/git/repositories"},

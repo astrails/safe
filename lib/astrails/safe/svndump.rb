@@ -3,7 +3,7 @@ module Astrails
     class Svndump < Source
 
       def command
-        @command ||= "svnadmin dump #{@config[:repo_path]}"
+        "svnadmin dump #{@config[:options]} #{@config[:repo_path]}"
       end
 
       def extension; '.svn'; end
