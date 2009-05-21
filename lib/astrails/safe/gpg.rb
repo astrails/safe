@@ -10,9 +10,9 @@ module Astrails
 
       def pipe
         if key
-          "|gpg #{@config[:options]} -e -r #{key}"
+          "|gpg #{@config[:gpg, :options]} -e -r #{key}"
         elsif password
-          "|gpg #{@config[:options]} -c --passphrase-file #{gpg_password_file(password)}"
+          "|gpg #{@config[:gpg,:options]} -c --passphrase-file #{gpg_password_file(password)}"
         end
       end
 
@@ -23,7 +23,7 @@ module Astrails
       def active?
         raise RuntimeError, "can't use both gpg password and pubkey" if key && password
 
-        password || key
+        !!(password || key)
       end
 
       private

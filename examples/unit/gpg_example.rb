@@ -17,15 +17,15 @@ describe Astrails::Safe::Gpg do
     )
   end
 
-  before(:each) do
-    @gpg = gpg()
-    stub(@gpg).gpg_password_file {"pwd-file"}
-    stub(@gpg).pipe {"|gpg -BLAH"}
-  end
-
   after(:each) { Astrails::Safe::TmpFile.cleanup }
 
   describe :process do
+
+    before(:each) do
+      @gpg = gpg()
+      stub(@gpg).gpg_password_file {"pwd-file"}
+      stub(@gpg).pipe {"|gpg -BLAH"}
+    end
 
     describe "when active" do
       before(:each) do
@@ -38,7 +38,7 @@ describe Astrails::Safe::Gpg do
       end
 
       it "should add command pipe" do
-        mock(@backup.command) << (/\|gpg -/)
+        mock(@backup.command) << (/\|gpg -BLAH/)
         @gpg.process
       end
 
@@ -103,7 +103,7 @@ describe Astrails::Safe::Gpg do
 
     describe "with key" do
       before(:each) do
-        @gpg = gpg(:gpg => {:key => "foo"}, :options => "OPT")
+        @gpg = gpg(:gpg => {:key => "foo", :options => "GPG-OPT"}, :options => "OPT")
       end
 
       it "should not call gpg_password_file" do
@@ -111,19 +111,19 @@ describe Astrails::Safe::Gpg do
         @gpg.send(:pipe)
       end
 
-      it "should use '-r' and options" do
-        @gpg.send(:pipe).should == "|gpg OPT -e -r foo"
+      it "should use '-r' and :options" do
+        @gpg.send(:pipe).should == "|gpg GPG-OPT -e -r foo"
       end
     end
 
     describe "with password" do
       before(:each) do
-        @gpg = gpg(:gpg => {:password => "bar"}, :options => "OPT")
+        @gpg = gpg(:gpg => {:password => "bar", :options => "GPG-OPT"}, :options => "OPT")
         stub(@gpg).gpg_password_file(anything) {"pass-file"}
       end
 
       it "should use '--passphrase-file' and :options" do
-        @gpg.send(:pipe).should == "|gpg OPT -c --passphrase-file pass-file"
+        @gpg.send(:pipe).should == "|gpg GPG-OPT -c --passphrase-file pass-file"
       end
     end
   end
