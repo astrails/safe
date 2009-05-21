@@ -25,7 +25,7 @@ Note
 
 Support for pg_dump and svndump was contributed but since I don't personally use them i don't have an easy
 way of testing it. So if you use Subversion or PostgreSQL please test the new functionality and report if
-there are any problems.
+there are any problems. Issues tracker is [here](http://github.com/astrails/safe/issues)
 
 Usage
 -----
