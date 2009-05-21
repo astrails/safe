@@ -1,23 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../example_helper')
 
 describe Astrails::Safe::Config do
-  it "pgdump" do
-    config = Astrails::Safe::Config::Node.new do
-      local do
-        path "path"
-      end
-
-    end
-
-    expected = {
-      "local" => {"path" => "path"},
-
-    }
-
-    config.to_hash.should == expected
-  end
-
-  it "foo" do
+  it "should parse example config" do
     config = Astrails::Safe::Config::Node.new do
       local do
         path "path"
