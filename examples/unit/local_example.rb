@@ -5,6 +5,9 @@ describe Astrails::Safe::Local do
     {
       :local => {
         :path => "/:kind~:id~:timestamp"
+      },
+      :keep => {
+        :local => 2
       }
     }
   end
@@ -77,6 +80,25 @@ describe Astrails::Safe::Local do
   end
 
   describe :cleanup do
-    it "should have test"
+    before(:each) do
+      @local = local
+      @files = [4,1,3,2].to_a.map { |i| "aaaaa#{i}" }
+      stub(Dir).[](anything) {@files}
+      stub(File).file?(anything) {true}
+      stub(File).size(anything) {1}
+      stub(File).unlink
+    end
+
+    it "should check [:keep, :local]" do
+      @local.config[:keep][:local] = nil
+      dont_allow(Dir).[]
+      @local.send :cleanup
+    end
+
+    it "should delete extra files" do
+      mock(File).unlink("aaaaa1")
+      mock(File).unlink("aaaaa2")
+      @local.send :cleanup
+    end
   end
 end

@@ -35,7 +35,7 @@ module Astrails
 
         base = File.basename(@backup.filename).split(".").first
 
-        puts "listing files in #{bucket}:#{prefix}/#{base}"
+        puts "listing files in #{bucket}:#{prefix}/#{base}" if $_VERBOSE
         files = AWS::S3::Bucket.objects(bucket, :prefix => "#{prefix}/#{base}", :max_keys => keep * 2)
         puts files.collect {|x| x.key} if $_VERBOSE
 

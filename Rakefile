@@ -28,7 +28,7 @@ end
 
 Micronaut::RakeTask.new(:rcov) do |examples|
   examples.pattern = 'examples/**/*_example.rb'
-  examples.rcov_opts = '-Ilib -Iexamples'
+  examples.rcov_opts = '-Ilib -Iexamples -iastrails -x\/gems\/'
   examples.rcov = true
 end
 
