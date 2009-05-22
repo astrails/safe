@@ -33,7 +33,7 @@ module Astrails
 
         return unless keep = @config[:keep, :s3]
 
-        base = File.basename(filename).split(".").first
+        base = File.basename(@backup.filename).split(".").first
 
         puts "listing files in #{bucket}:#{prefix}/#{base}"
         files = AWS::S3::Bucket.objects(bucket, :prefix => "#{prefix}/#{base}", :max_keys => keep * 2)

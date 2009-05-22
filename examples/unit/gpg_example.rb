@@ -12,8 +12,8 @@ describe Astrails::Safe::Gpg do
 
   def gpg(config = {}, backup = def_backup)
     Astrails::Safe::Gpg.new(
-      @config = Astrails::Safe::Config::Node.new(nil, config),
-      @backup = Astrails::Safe::Backup.new(backup)
+      Astrails::Safe::Config::Node.new(nil, config),
+      Astrails::Safe::Backup.new(backup)
     )
   end
 
@@ -33,17 +33,17 @@ describe Astrails::Safe::Gpg do
       end
 
       it "should add .gpg extension" do
-        mock(@backup.extension) << '.gpg'
+        mock(@gpg.backup.extension) << '.gpg'
         @gpg.process
       end
 
       it "should add command pipe" do
-        mock(@backup.command) << (/\|gpg -BLAH/)
+        mock(@gpg.backup.command) << (/\|gpg -BLAH/)
         @gpg.process
       end
 
       it "should set compressed" do
-        mock(@backup).compressed = true
+        mock(@gpg.backup).compressed = true
         @gpg.process
       end
     end
@@ -54,17 +54,17 @@ describe Astrails::Safe::Gpg do
       end
 
       it "should not touch extension" do
-        dont_allow(@backup.extension) << anything
+        dont_allow(@gpg.backup.extension) << anything
         @gpg.process
       end
 
       it "should not touch command" do
-        dont_allow(@backup.command) << anything
+        dont_allow(@gpg.backup.command) << anything
         @gpg.process
       end
 
       it "should not touch compressed" do
-        dont_allow(@backup).compressed = anything
+        dont_allow(@gpg.backup).compressed = anything
         @gpg.process
       end
     end
