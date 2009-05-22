@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{safe}
-  s.version = "0.1.8"
+  s.version = "0.1.9"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Astrails Ltd.", "Mark Mansour"]
-  s.date = %q{2009-05-21}
+  s.date = %q{2009-05-22}
   s.default_executable = %q{astrails-safe}
   s.description = %q{Simple tool to backup databases (MySQL and PostgreSQL) and filesystem locally or to Amazon S3 (with optional encryption)}
   s.email = %q{we@astrails.com}
