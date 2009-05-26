@@ -82,23 +82,23 @@ describe Astrails::Safe::S3 do
     end
   end
 
-  describe :prefix do
+  describe :path do
     before(:each) do
       @s3 = s3
     end
     it "should use s3/path 1st" do
       @s3.config[:s3][:path] = "s3_path"
       @s3.config[:local] = {:path => "local_path"}
-      @s3.send(:prefix).should == "s3_path"
+      @s3.send(:path).should == "s3_path"
     end
 
     it "should use local/path 2nd" do
       @s3.config[:local] = {:path => "local_path"}
-      @s3.send(:prefix).should == "local_path"
+      @s3.send(:path).should == "local_path"
     end
 
     it "should use constant 3rd" do
-      @s3.send(:prefix).should == "_kind/_id"
+      @s3.send(:path).should == "_kind/_id"
     end
 
   end

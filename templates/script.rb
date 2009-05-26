@@ -7,7 +7,7 @@ safe do
   #   :timestamp -> current run timestamp (same for all the backups in the same 'run')
   # you can set separate :path for all backups (or once globally here)
   local do
-    path "/backup/:kind/"
+    path "/backup/:kind"
   end
 
   ## uncomment to enable uploads to Amazon S3

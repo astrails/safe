@@ -8,8 +8,8 @@ module Astrails
         bucket && key && secret
       end
 
-      def prefix
-        @prefix ||= expand(config[:s3, :path] || config[:local, :path] || ":kind/:id")
+      def path
+        @path ||= expand(config[:s3, :path] || config[:local, :path] || ":kind/:id")
       end
 
       def save
@@ -18,11 +18,11 @@ module Astrails
         # needed in cleanup even on dry run
         AWS::S3::Base.establish_connection!(:access_key_id => key, :secret_access_key => secret, :use_ssl => true) unless $LOCAL
 
-        puts "Uploading #{bucket}:#{path}" if $_VERBOSE || $DRY_RUN
+        puts "Uploading #{bucket}:#{full_path}" if $_VERBOSE || $DRY_RUN
         unless $DRY_RUN || $LOCAL
           AWS::S3::Bucket.create(bucket)
           File.open(@backup.path) do |file|
-            AWS::S3::S3Object.store(path, file, bucket)
+            AWS::S3::S3Object.store(full_path, file, bucket)
           end
           puts "...done" if $_VERBOSE
         end
@@ -33,10 +33,9 @@ module Astrails
 
         return unless keep = @config[:keep, :s3]
 
-        base = File.basename(@backup.filename).split(".").first
 
-        puts "listing files in #{bucket}:#{prefix}/#{base}" if $_VERBOSE
-        files = AWS::S3::Bucket.objects(bucket, :prefix => "#{prefix}/#{base}", :max_keys => keep * 2)
+        puts "listing files in #{bucket}:#{base}" if $_VERBOSE
+        files = AWS::S3::Bucket.objects(bucket, :prefix => base, :max_keys => keep * 2)
         puts files.collect {|x| x.key} if $_VERBOSE
 
         files = files.

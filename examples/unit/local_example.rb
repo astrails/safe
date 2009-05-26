@@ -37,15 +37,15 @@ describe Astrails::Safe::Local do
     end
   end
 
-  describe :prefix do
+  describe :path do
     it "should raise RuntimeError when no path" do
       lambda {
-        local({}).send :prefix
+        local({}).send :path
       }.should raise_error(RuntimeError, "missing :local/:path")
     end
 
     it "should use local/path" do
-      local.send(:prefix).should == "/mysqldump~blog~NoW"
+      local.send(:path).should == "/mysqldump~blog~NoW"
     end
   end
 
@@ -53,7 +53,7 @@ describe Astrails::Safe::Local do
     before(:each) do
       @local = local
       stub(@local).system
-      stub(@local).path {"file-path"}
+      stub(@local).full_path {"file-path"}
       stub(FileUtils).mkdir_p
     end
 

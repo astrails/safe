@@ -11,9 +11,13 @@ module Astrails
 
       protected
 
-      # prefix is defined in subclass
-      def path
-        @path ||= File.join(prefix, @backup.filename) + @backup.extension
+      # path is defined in subclass
+      def base
+        @base ||= File.join(path, File.basename(@backup.filename).split(".").first)
+      end
+
+      def full_path
+        @full_path ||= File.join(path, @backup.filename) + @backup.extension
       end
 
       # call block on files to be removed (all except for the LAST 'limit' files
