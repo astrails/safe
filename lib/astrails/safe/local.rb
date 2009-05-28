@@ -19,7 +19,10 @@ module Astrails
 
         unless $DRY_RUN
           FileUtils.mkdir_p(path) unless File.directory?(path)
-          system "#{@backup.command}>#{@backup.path = full_path}"
+          benchmark = Benchmark.realtime do
+            system "#{@backup.command}>#{@backup.path = full_path}"
+          end
+          puts("command took " + sprintf("%.2f", benchmark) + " second(s).") if $_VERBOSE
         end
 
       end

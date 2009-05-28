@@ -20,11 +20,14 @@ module Astrails
 
         puts "Uploading #{bucket}:#{full_path}" if $_VERBOSE || $DRY_RUN
         unless $DRY_RUN || $LOCAL
-          AWS::S3::Bucket.create(bucket)
-          File.open(@backup.path) do |file|
-            AWS::S3::S3Object.store(full_path, file, bucket)
+          benchmark = Benchmark.realtime do
+            AWS::S3::Bucket.create(bucket)
+            File.open(@backup.path) do |file|
+              AWS::S3::S3Object.store(full_path, file, bucket)
+            end
           end
           puts "...done" if $_VERBOSE
+          puts("Upload took " + sprintf("%.2f", benchmark) + " second(s).") if $_VERBOSE
         end
       end
 

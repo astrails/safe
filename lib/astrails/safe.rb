@@ -1,5 +1,6 @@
 require "aws/s3"
 require 'fileutils'
+require 'benchmark'
 
 require 'tempfile'
 require 'extensions/mktmpdir'
