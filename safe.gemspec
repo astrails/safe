@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{safe}
-  s.version = "0.1.10"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Astrails Ltd.", "Mark Mansour"]
-  s.date = %q{2009-05-27}
+  s.date = %q{2009-06-04}
   s.default_executable = %q{astrails-safe}
   s.description = %q{Simple tool to backup databases (MySQL and PostgreSQL) and filesystem locally or to Amazon S3 (with optional encryption)}
   s.email = %q{we@astrails.com}
@@ -59,17 +59,17 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.1}
   s.summary = %q{Backup filesystem and databases (MySQL and PostgreSQL) to Amazon S3 (with encryption)}
   s.test_files = [
-    "examples/example_helper.rb",
-     "examples/integration/archive_integration_example.rb",
-     "examples/unit/archive_example.rb",
-     "examples/unit/config_example.rb",
-     "examples/unit/gpg_example.rb",
+    "examples/integration/archive_integration_example.rb",
+     "examples/example_helper.rb",
      "examples/unit/gzip_example.rb",
-     "examples/unit/local_example.rb",
-     "examples/unit/mysqldump_example.rb",
-     "examples/unit/pgdump_example.rb",
      "examples/unit/s3_example.rb",
-     "examples/unit/svndump_example.rb"
+     "examples/unit/mysqldump_example.rb",
+     "examples/unit/gpg_example.rb",
+     "examples/unit/archive_example.rb",
+     "examples/unit/svndump_example.rb",
+     "examples/unit/config_example.rb",
+     "examples/unit/local_example.rb",
+     "examples/unit/pgdump_example.rb"
   ]
 
   if s.respond_to? :specification_version then

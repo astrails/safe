@@ -9,7 +9,26 @@ module Astrails
       end
 
       def self.cleanup
-        FileUtils.remove_entry_secure tmproot
+        begin
+          FileUtils.remove_entry_secure tmproot
+        rescue ArgumentError => e
+          if e.message =~ /parent directory is world writable/
+            puts <<-ERR
+
+
+********************************************************************************
+It looks like you have wrong permissions on your TEMP directory.  The usual
+case is when you have world writable TEMP directory withOUT the sticky bit.
+
+Try "chmod +t" on it.
+
+********************************************************************************
+
+ERR
+          else
+            raise
+          end
+        end
         @tmproot = nil
       end
 
