@@ -24,6 +24,14 @@ safe do
   ## alternative style:
   # s3 :key => YOUR_S3_KEY, :secret => YOUR_S3_SECRET, :bucket => S3_BUCKET
 
+  ## uncomment to enable uploads via SFTP
+  # sftp do
+  #   hostname "YOUR_REMOTE_HOSTNAME"
+  #   username "YOUR_REMOTE_USERNAME"
+  #   password "YOUR_REMOTE_PASSWORD"
+  #   path ":kind/:id" # this is the default
+  # end
+  
   ## uncomment to enable GPG encryption.
   ## Note: you can use public 'key' or symmetric password but not both!
   # gpg do
