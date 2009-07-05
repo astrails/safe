@@ -5,7 +5,7 @@ module Astrails
       protected
 
       def active?
-        host && user && password
+        host && user
       end
 
       def path
@@ -16,7 +16,9 @@ module Astrails
         puts "Uploading #{host}:#{full_path} via SFTP" if $_VERBOSE || $DRY_RUN
 
         unless $DRY_RUN || $LOCAL
-          Net::SFTP.start(host, user, :password => password) do |sftp|
+          opts = {}
+          opts[:password] = password if password
+          Net::SFTP.start(host, user, opts) do |sftp|
             puts "Sending #{@backup.path} to #{full_path}" if $_VERBOSE
             begin
               sftp.upload! @backup.path, full_path
