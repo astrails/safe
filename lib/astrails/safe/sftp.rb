@@ -43,9 +43,9 @@ module Astrails
 
         return unless keep = @config[:keep, :sftp]
 
-        puts "listing files in #{host}:#{path}" if $_VERBOSE
+        puts "listing files: #{host}:#{base}*" if $_VERBOSE
         Net::SFTP.start(host, user, :password => password) do |sftp|
-          files = sftp.dir.glob(path, '*')
+          files = sftp.dir.glob(path, File.basename("#{base}*"))
 
           puts files.collect {|x| x.name } if $_VERBOSE
 
