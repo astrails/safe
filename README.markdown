@@ -28,6 +28,8 @@ The following functionality was contributed by astrails-safe users:
 * PostgreSQL dump using pg_dump (by Mark Mansour <mark@stateofflux.com>)
 * Subversion dump using svndump (by Richard Luther <richard.luther@gmail.com>)
 * SFTP remote storage (by Adam <adam@mediadrive.ca>)
+* benchmarking output (By Neer)
+
 
 Thanks to all :)
 
