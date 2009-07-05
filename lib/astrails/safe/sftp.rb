@@ -5,7 +5,7 @@ module Astrails
       protected
 
       def active?
-        hostname && username && password
+        host && user && password
       end
 
       def path
@@ -13,10 +13,10 @@ module Astrails
       end
 
       def save
-        puts "Uploading #{hostname}:#{full_path} via SFTP" if $_VERBOSE || $DRY_RUN
-        
+        puts "Uploading #{host}:#{full_path} via SFTP" if $_VERBOSE || $DRY_RUN
+
         unless $DRY_RUN || $LOCAL
-          Net::SFTP.start(hostname, username, :password => password) do |sftp|            
+          Net::SFTP.start(host, user, :password => password) do |sftp|
             puts "Sending #{@backup.path} to #{full_path}" if $_VERBOSE
             begin
               sftp.upload! @backup.path, full_path
@@ -41,32 +41,32 @@ module Astrails
 
         return unless keep = @config[:keep, :sftp]
 
-        puts "listing files in #{hostname}:#{path}" if $_VERBOSE
-        Net::SFTP.start(hostname, username, :password => password) do |sftp|
+        puts "listing files in #{host}:#{path}" if $_VERBOSE
+        Net::SFTP.start(host, user, :password => password) do |sftp|
           files = sftp.dir.glob(path, '*')
-          
+
           puts files.collect {|x| x.name } if $_VERBOSE
-          
+
           files = files.
             collect {|x| x.name }.
             sort
-          
+
           cleanup_with_limit(files, keep) do |f|
             file = File.join(path, f)
-            puts "removing sftp file #{hostname}:#{file}" if $DRY_RUN || $_VERBOSE
+            puts "removing sftp file #{host}:#{file}" if $DRY_RUN || $_VERBOSE
             sftp.remove!(file) unless $DRY_RUN || $LOCAL
           end
         end
       end
-      
-      def hostname
-        @config[:sftp, :hostname]
+
+      def host
+        @config[:sftp, :host]
       end
 
-      def username
-        @config[:sftp, :username]
+      def user
+        @config[:sftp, :user]
       end
-      
+
       def password
         @config[:sftp, :password]
       end

@@ -20,12 +20,21 @@ We needed a backup solution that will satisfy the following requirements:
 
 And since we didn't find any, we wrote our own :)
 
-Note
-----
+Contributions
+-------------
 
-Support for pg_dump and svndump was contributed but since I don't personally use them i don't have an easy
-way of testing it. So if you use Subversion or PostgreSQL please test the new functionality and report if
-there are any problems. Issues tracker is [here](http://github.com/astrails/safe/issues)
+The following functionality was contributed by astrails-safe users:
+
+* PostgreSQL dump using pg_dump (by Mark Mansour <mark@stateofflux.com>)
+* Subversion dump using svndump (by Richard Luther <richard.luther@gmail.com>)
+* SFTP remote storage (by Adam <adam@mediadrive.ca>)
+
+Thanks to all :)
+
+Reporting problems
+------------------
+
+Please report problems at the [Issues tracker](http://github.com/astrails/safe/issues)
 
 Usage
 -----
@@ -116,6 +125,12 @@ Example configuration
       secret "........................................"
       bucket "backup.astrails.com"
       path "servers/alpha/:kind/:id"
+    end
+
+    sftp do
+      host "sftp.astrails.com"
+      user "astrails"
+      password "ssh password for sftp"
     end
 
     gpg do

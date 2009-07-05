@@ -26,12 +26,12 @@ safe do
 
   ## uncomment to enable uploads via SFTP
   # sftp do
-  #   hostname "YOUR_REMOTE_HOSTNAME"
-  #   username "YOUR_REMOTE_USERNAME"
+  #   host "YOUR_REMOTE_HOSTNAME"
+  #   user "YOUR_REMOTE_USERNAME"
   #   password "YOUR_REMOTE_PASSWORD"
   #   path ":kind/:id" # this is the default
   # end
-  
+
   ## uncomment to enable GPG encryption.
   ## Note: you can use public 'key' or symmetric password but not both!
   # gpg do
