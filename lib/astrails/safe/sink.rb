@@ -13,7 +13,7 @@ module Astrails
 
       # path is defined in subclass
       def base
-        @base ||= File.join(path, File.basename(@backup.filename).split(".").first)
+        @base ||= File.join(path, File.basename(@backup.filename).split(".").first + '.')
       end
 
       def full_path
