@@ -22,7 +22,7 @@ safe do
   # end
 
   ## alternative style:
-  # s3 :key => YOUR_S3_KEY, :secret => YOUR_S3_SECRET, :bucket => S3_BUCKET
+  # s3 :key => YOUR_S3_KEY, :secret => YOUR_S3_SECRET, :bucket => S3_BUCKET, :path => ":kind/"
 
   ## uncomment to enable uploads via SFTP
   # sftp do

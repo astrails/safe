@@ -73,9 +73,15 @@ describe Astrails::Safe::Local do
     end
 
     describe "dry run" do
+      before(:all) {$DRY_RUN = true}
+      after(:all)  {$DRY_RUN = false}
+
       it "should not create directory"
       it "should not call system"
-      it "should set backup.path"
+      it "should set backup.path" do
+        mock(@backup).path = "file-path"
+        @local.send(:save)
+      end
     end
   end
 

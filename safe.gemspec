@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{safe}
-  s.version = "0.2.2"
+  s.version = "0.2.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Astrails Ltd.", "Mark Mansour"]
-  s.date = %q{2009-07-05}
+  s.date = %q{2009-07-17}
   s.default_executable = %q{astrails-safe}
   s.description = %q{Simple tool to backup databases (MySQL and PostgreSQL) and filesystem locally or to Amazon S3 (with optional encryption)}
   s.email = %q{we@astrails.com}
@@ -81,10 +81,13 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<aws-s3>, [">= 0"])
+      s.add_runtime_dependency(%q<net-sftp>, [">= 0"])
     else
       s.add_dependency(%q<aws-s3>, [">= 0"])
+      s.add_dependency(%q<net-sftp>, [">= 0"])
     end
   else
     s.add_dependency(%q<aws-s3>, [">= 0"])
+    s.add_dependency(%q<net-sftp>, [">= 0"])
   end
 end

@@ -13,6 +13,8 @@ module Astrails
       end
 
       def save
+        raise RuntimeError, "pipe-streaming not supported for SFTP." unless @backup.path
+
         puts "Uploading #{host}:#{full_path} via SFTP" if $_VERBOSE || $DRY_RUN
 
         unless $DRY_RUN || $LOCAL

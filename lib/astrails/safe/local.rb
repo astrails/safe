@@ -17,10 +17,12 @@ module Astrails
       def save
         puts "command: #{@backup.command}" if $_VERBOSE
 
+        @backup.path = full_path # need to do it outside DRY_RUN so that it will be avialable for S3 DRY_RUN
+
         unless $DRY_RUN
           FileUtils.mkdir_p(path) unless File.directory?(path)
           benchmark = Benchmark.realtime do
-            system "#{@backup.command}>#{@backup.path = full_path}"
+            system "#{@backup.command}>#{@backup.path}"
           end
           puts("command took " + sprintf("%.2f", benchmark) + " second(s).") if $_VERBOSE
         end

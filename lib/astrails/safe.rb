@@ -41,10 +41,10 @@ module Astrails
       #config.dump
 
 
-      [[Astrails::Safe::Mysqldump, [:mysqldump, :databases]],
-       [Astrails::Safe::Pgdump, [:pgdump, :databases]],
-       [Astrails::Safe::Archive, [:tar, :archives]],
-       [Astrails::Safe::Svndump, [:svndump, :repos]]
+      [[Mysqldump, [:mysqldump, :databases]],
+       [Pgdump,    [:pgdump,    :databases]],
+       [Archive,   [:tar,       :archives]],
+       [Svndump,   [:svndump,   :repos]]
       ].each do |klass, path|
         if collection = config[*path]
           collection.each do |name, config|
