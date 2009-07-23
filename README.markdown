@@ -71,14 +71,14 @@ We recommend also pringing the hard paper copy of your GPG key 'just in case'.
 
 The procedure to create and transfer the key is as follows:
 
-1. run 'gpg --gen-gen' on your local machine and follow onscreen instructions to create the key
+1. run 'gpg --gen-key' on your local machine and follow onscreen instructions to create the key
    (you can accept all the defaults).
 
 2. extract your public key into a file (assuming you used test@example.com as your key email):
    gpg -a --export test@example.com > test@example.com.pub
 
 3. transfer public key to the server
-   scp backup@example.com root@example.com:
+   scp test@example.com.pub root@example.com:
 
 4. import public key on the remote system:
 <pre>
