@@ -4,11 +4,11 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "safe"
+    gem.name = "astrails-safe"
     gem.summary = %Q{Backup filesystem and databases (MySQL and PostgreSQL) to Amazon S3 (with encryption)}
     gem.description = "Simple tool to backup databases (MySQL and PostgreSQL) and filesystem locally or to Amazon S3 (with optional encryption)"
     gem.email = "we@astrails.com"
-    gem.homepage = "http://github.com/astrails/safe"
+    gem.homepage = "http://blog.astrails.com/astrails-safe"
     gem.authors  = ["Astrails Ltd.", "Mark Mansour"]
     gem.files = FileList["[A-Z]*.*", "{bin,examples,generators,lib,rails,spec,test,templates}/**/*", 'Rakefile', 'LICENSE*']
 

@@ -3,7 +3,7 @@ astrails-safe
 
 Simple database and filesystem backups with S3 support (with optional encryption)
 
-Home: github.com/astrails/safe
+Home: http://blog.astrails.com/astrails-safe
 
 Motivation
 ----------
@@ -30,8 +30,12 @@ The following functionality was contributed by astrails-safe users:
 * SFTP remote storage (by Adam <adam@mediadrive.ca>)
 * benchmarking output (By Neer)
 
-
 Thanks to all :)
+
+Installation
+------------
+
+    sudo gem install astrails-safe --source http://gemcutter.org
 
 Reporting problems
 ------------------
