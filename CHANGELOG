@@ -1,0 +1,4 @@
+0.2.5
+
+Safety mesure: Disable overwrite of existing configuration keys except for multi-value keys
+  supported multi-value keys: skip_tables, exclude, files
