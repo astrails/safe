@@ -148,8 +148,8 @@ Example configuration
     end
 
     keep do
-      local 2
-      s3 2
+      local 20
+      s3 30
     end
 
     mysqldump do
@@ -162,7 +162,10 @@ Example configuration
       database :blog
       database :servershape
       database :astrails_com
-      database :secret_project_com
+      database :secret_project_com do
+        skip_tables "foo"
+        skip_tables ["bar", "baz"]
+      end
 
     end
 
@@ -189,7 +192,8 @@ Example configuration
 
       archive "blog-astrails-com" do
         files "/var/www/blog.astrails.com/"
-        exclude ["/var/www/blog.astrails.com/log", "/var/www/blog.astrails.com/tmp"]
+        exclude "/var/www/blog.astrails.com/log"
+        exclude "/var/www/blog.astrails.com/tmp"
       end
 
       archive "astrails-com" do

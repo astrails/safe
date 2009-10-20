@@ -44,7 +44,7 @@ describe Astrails::Safe::S3 do
     end
 
     it "should check [:keep, :s3]" do
-      @s3.config[:keep][:s3] = nil
+      @s3.config[:keep].data["s3"] = nil
       dont_allow(@s3.backup).filename
       @s3.send :cleanup
     end
@@ -67,17 +67,17 @@ describe Astrails::Safe::S3 do
     end
 
     it "should be false if bucket is missing" do
-      @s3.config[:s3][:bucket] = nil
+      @s3.config[:s3].data["bucket"] = nil
       @s3.should_not be_active
     end
 
     it "should be false if key is missing" do
-      @s3.config[:s3][:key] = nil
+      @s3.config[:s3].data["key"] = nil
       @s3.should_not be_active
     end
 
     it "should be false if secret is missing" do
-      @s3.config[:s3][:secret] = nil
+      @s3.config[:s3].data["secret"] = nil
       @s3.should_not be_active
     end
   end
@@ -87,7 +87,7 @@ describe Astrails::Safe::S3 do
       @s3 = s3
     end
     it "should use s3/path 1st" do
-      @s3.config[:s3][:path] = "s3_path"
+      @s3.config[:s3].data["path"] = "s3_path"
       @s3.config[:local] = {:path => "local_path"}
       @s3.send(:path).should == "s3_path"
     end

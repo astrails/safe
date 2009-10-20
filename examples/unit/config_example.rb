@@ -181,4 +181,33 @@ describe Astrails::Safe::Config do
 
     config.to_hash.should == expected
   end
+
+  it "should make an array from multivalues" do
+    config = Astrails::Safe::Config::Node.new do
+      skip_tables "a"
+      skip_tables "b"
+      files "/foo"
+      files "/bar"
+      exclude "/foo/bar"
+      exclude "/foo/bar/baz"
+    end
+
+    expected = {
+      "skip_tables" => ["a", "b"],
+      "files" => ["/foo", "/bar"],
+      "exclude" => ["/foo/bar", "/foo/bar/baz"],
+    }
+
+    config.to_hash.should == expected
+  end
+
+  it "should raise error on key duplication" do
+    proc do
+      Astrails::Safe::Config::Node.new do
+        path "foo"
+        path "bar"
+      end
+    end.should raise_error(ArgumentError, "duplicate value for 'path'")
+  end
+
 end

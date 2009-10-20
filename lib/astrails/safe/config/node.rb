@@ -4,6 +4,7 @@ module Astrails
     module Config
       class Node
         attr_reader :parent
+        attr_reader :data
         def initialize(parent = nil, data = {}, &block)
           @parent, @data = parent, {}
           data.each { |k, v| self[k] = v }
@@ -26,12 +27,17 @@ module Astrails
         end
         alias :[] :find
 
+        MULTIVALUES = %w/skip_tables exclude files/
         def set(key, value, &block)
+          if @data[key.to_s]
+            raise(ArgumentError, "duplicate value for '#{key}'") if value.is_a?(Hash) || !MULTIVALUES.include?(key.to_s)
+          end
+
           if value.is_a?(Hash)
-            @data[key.to_s] = Node.new(self, value, &block) 
+            @data[key.to_s] = Node.new(self, value, &block)
           else
             raise(ArgumentError, "#{key}: no block supported for simple values") if block
-            if @data[key.to_s] && value
+            if @data[key.to_s]
               @data[key.to_s] = @data[key.to_s].to_a + value.to_a
             else
               @data[key.to_s] = value

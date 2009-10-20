@@ -74,8 +74,12 @@ safe do
     #   gpg do
     #     password "custom-production-pass"
     #   end
-
-    #   skip_tables [:logger_exceptions, :request_logs] # skip those tables during backup
+    #   # skip those tables during backup
+    #   # you can pass an array
+    #   skip_tables [:logger_exceptions, :request_logs]
+    #   # or pass them all separately
+    #   skip_tables :test1
+    #   skip_tables :test2
     # end
 
   end
@@ -99,12 +103,16 @@ safe do
     # archive "git-repositories" do
     #   # files and directories to backup
     #   files "/home/git/repositories"
+    #   # can have more then one 'files' lines or/and use an array
+    #   files ["/home/dev/work/foo", "/home/dev/work/bar"]
     # end
 
     # archive "etc-files" do
     #   files "/etc"
     #   # exlude those files/directories
     #   exclude "/etc/puppet/other"
+    #   # can have multiple 'exclude' lines or/and use an array
+    #   exclude ["/etc/tmp/a", "/etc/tmp/b"]
     # end
 
     # archive "dot-configs" do

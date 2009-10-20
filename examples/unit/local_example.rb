@@ -87,21 +87,21 @@ describe Astrails::Safe::Local do
 
   describe :cleanup do
     before(:each) do
-      @local = local
       @files = [4,1,3,2].to_a.map { |i| "/mysqldump~blog~NoW/qweqwe.#{i}" }
-      stub(Dir).[]("/mysqldump~blog~NoW/qweqwe.*") {@files}
       stub(File).file?(anything) {true}
       stub(File).size(anything) {1}
       stub(File).unlink
     end
 
     it "should check [:keep, :local]" do
-      @local.config[:keep][:local] = nil
+      @local = local(def_config.merge(:keep => {}))
       dont_allow(Dir).[]
       @local.send :cleanup
     end
 
     it "should delete extra files" do
+      @local = local
+      mock(Dir).[]("/mysqldump~blog~NoW/qweqwe.*") {@files}
       mock(File).unlink("/mysqldump~blog~NoW/qweqwe.1")
       mock(File).unlink("/mysqldump~blog~NoW/qweqwe.2")
       @local.send :cleanup
