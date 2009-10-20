@@ -42,6 +42,7 @@ describe "tar backup" do
         archive :test1 do
           files src
           exclude "#{src}/q/w"
+          exclude "#{src}/q/w/e"
         end
       end
     end
@@ -74,6 +75,8 @@ describe "tar backup" do
     it "should only include qwe 1 and 2 (no 3)" do
       File.exists?("#{@test}/qwe1").should be_true
       File.exists?("#{@test}/q/qwe2").should be_true
+      File.exists?("#{@test}/q/w/qwe3").should be_false
+      File.exists?("#{@test}/q/w/e/qwe4").should be_false
     end
 
     it "should preserve file content" do
