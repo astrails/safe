@@ -15,7 +15,8 @@ module Astrails
           file.puts "[mysqldump]"
           %w/user password socket host port/.each do |k|
             v = @config[k]
-            file.puts "#{k} = #{v}" if v
+            # values are quoted to enclose comment characters ('#')
+            file.puts "#{k} = '#{v}'" if v
           end
         end
       end

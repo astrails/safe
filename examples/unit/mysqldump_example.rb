@@ -66,17 +66,17 @@ describe Astrails::Safe::Mysqldump do
   end
 
   describe :mysql_password_file do
-    it "should create passwords file" do
+    it "should create passwords file with quoted values" do
       m = mysqldump
       file = m.send(:mysql_password_file)
       File.exists?(file).should == true
       File.read(file).should == <<-PWD
 [mysqldump]
-user = User
-password = pwd
-socket = socket
-host = localhost
-port = 7777
+user = 'User'
+password = 'pwd'
+socket = 'socket'
+host = 'localhost'
+port = '7777'
       PWD
     end
   end
