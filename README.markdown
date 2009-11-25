@@ -136,6 +136,7 @@ Example configuration
     sftp do
       host "sftp.astrails.com"
       user "astrails"
+      # port 8023
       password "ssh password for sftp"
     end
 

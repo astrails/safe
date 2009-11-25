@@ -28,6 +28,7 @@ safe do
   # sftp do
   #   host "YOUR_REMOTE_HOSTNAME"
   #   user "YOUR_REMOTE_USERNAME"
+  #   # port "NON STANDARD SSH PORT"
   #   password "YOUR_REMOTE_PASSWORD"
   #   path ":kind/:id" # this is the default
   # end

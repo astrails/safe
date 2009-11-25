@@ -20,6 +20,7 @@ module Astrails
         unless $DRY_RUN || $LOCAL
           opts = {}
           opts[:password] = password if password
+          opts[:port] = port if port
           Net::SFTP.start(host, user, opts) do |sftp|
             puts "Sending #{@backup.path} to #{full_path}" if $_VERBOSE
             begin
@@ -46,7 +47,10 @@ module Astrails
         return unless keep = @config[:keep, :sftp]
 
         puts "listing files: #{host}:#{base}*" if $_VERBOSE
-        Net::SFTP.start(host, user, :password => password) do |sftp|
+        opts = {}
+        opts[:password] = password if password
+        opts[:port] = port if port
+        Net::SFTP.start(host, user, opts) do |sftp|
           files = sftp.dir.glob(path, File.basename("#{base}*"))
 
           puts files.collect {|x| x.name } if $_VERBOSE
@@ -74,6 +78,11 @@ module Astrails
       def password
         @config[:sftp, :password]
       end
+
+      def port
+        @config[:sftp, :port]
+      end
+
     end
   end
 end
