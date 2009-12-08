@@ -20,7 +20,7 @@ Options:
   -h, --help           This help screen
   -v, --verbose        be verbose, duh!
   -n, --dry-run        just pretend, don't do anything.
-  -L, --local          skip S3
+  -L, --local          skip S3 and Cloud Files
 
 Note: config file will be created from template if missing
 END
