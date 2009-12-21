@@ -88,7 +88,7 @@ safe do
   # # uncomment to enable
   # # backup PostgreSQL databases with pg_dump
   # pgdump do
-  #   option "-i -x -O"
+  #   options "-i -x -O"
   #
   #   user "markmansour"
   #   # password "" - leave this out if you have ident setup
