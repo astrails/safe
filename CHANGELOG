@@ -1,3 +1,5 @@
+0.2.6
+
 * fix typo in the template config file. (change option to options in pgdump)
 * add example 'options' for tar in the template config file.
 * do not try to upload more then 5G of data to S3. print error instead
