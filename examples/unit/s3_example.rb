@@ -15,14 +15,14 @@ describe Astrails::Safe::S3 do
     }
   end
 
-  def def_backup
+  def def_backup(extra = {})
     {
       :kind      => "_kind",
       :filename  => "/backup/somewhere/_kind-_id.NOW.bar",
       :extension => ".bar",
       :id        => "_id",
       :timestamp => "NOW"
-    }
+    }.merge(extra)
   end
 
   def s3(config = def_config, backup = def_backup)
@@ -104,9 +104,57 @@ describe Astrails::Safe::S3 do
   end
 
   describe :save do
-    it "should establish s3 connection"
-    it "should RuntimeError if no local file (i.e. :local didn't run)"
-    it "should open local file"
-    it "should upload file"
+    def add_stubs(*stubs)
+      stubs.each do |s|
+        case s
+        when :connection
+          stub(AWS::S3::Base).establish_connection!(:access_key_id => "_key", :secret_access_key => "_secret", :use_ssl => true)
+        when :stat
+          stub(File).stat("foo").stub!.size {123}
+        when :create_bucket
+          stub(AWS::S3::Bucket).create
+        when :file_open
+          stub(File).open("foo") {|f, block| block.call(:opened_file)}
+        when :s3_store
+          stub(AWS::S3::S3Object).store(@full_path, :opened_file, "_bucket")
+        end
+      end
+    end
+
+    before(:each) do
+      @s3 = s3(def_config, def_backup(:path => "foo"))
+      @full_path = "_kind/_id/backup/somewhere/_kind-_id.NOW.bar.bar"
+    end
+
+    it "should fail if no backup.file is set" do
+      @s3.backup.path = nil
+      proc {@s3.send(:save)}.should raise_error(RuntimeError)
+    end
+
+    it "should establish s3 connection" do
+      mock(AWS::S3::Base).establish_connection!(:access_key_id => "_key", :secret_access_key => "_secret", :use_ssl => true)
+      add_stubs(:stat, :create_bucket, :file_open, :s3_store)
+      @s3.send(:save)
+    end
+
+    it "should open local file" do
+      add_stubs(:connection, :stat, :create_bucket)
+      mock(File).open("foo")
+      @s3.send(:save)
+    end
+
+    it "should upload file" do
+      add_stubs(:connection, :stat, :create_bucket, :file_open)
+      mock(AWS::S3::S3Object).store(@full_path, :opened_file, "_bucket")
+      @s3.send(:save)
+    end
+
+    it "should fail on files bigger then 5G" do
+      add_stubs(:connection)
+      mock(File).stat("foo").stub!.size {5*1024*1024*1024+1}
+      mock(STDERR).puts(anything)
+      dont_allow(Benchmark).realtime
+      @s3.send(:save)
+    end
   end
 end
