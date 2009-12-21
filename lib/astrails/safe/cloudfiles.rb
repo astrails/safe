@@ -1,7 +1,8 @@
 module Astrails
   module Safe
     class Cloudfiles < Sink
-
+      MAX_CLOUDFILES_FILE_SIZE = 5368709120
+      
       protected
 
       def active?
@@ -19,6 +20,10 @@ module Astrails
         cf = CloudFiles::Connection.new(user, api_key, true, service_net) unless $LOCAL
         puts "Uploading #{container}:#{full_path} from #{@backup.path}" if $_VERBOSE || $DRY_RUN
         unless $DRY_RUN || $LOCAL
+          if File.stat(@backup.path).size > MAX_CLOUDFILES_FILE_SIZE
+            STDERR.puts "ERROR: File size exceeds maximum allowed for upload to Cloud Files (#{MAX_CLOUDFILES_FILE_SIZE}): #{@backup.path}"
+            return
+          end
           benchmark = Benchmark.realtime do
             cf_container = cf.create_container(container)
             o = cf_container.create_object(full_path,true)
