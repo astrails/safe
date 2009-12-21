@@ -187,6 +187,7 @@ Example configuration
     end
 
     tar do
+      options "-h" # dereference symlinks
       archive "git-repositories", :files => "/home/git/repositories"
       archive "dot-configs",      :files => "/home/*/.[^.]*"
       archive "etc",              :files => "/etc", :exclude => "/etc/puppet/other"

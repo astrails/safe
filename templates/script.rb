@@ -100,6 +100,8 @@ safe do
   # end
 
   tar do
+    # options "-h" # uncomment this to dereference symbolic links
+
     # 'archive' is a collection item, just like 'database'
     # archive "git-repositories" do
     #   # files and directories to backup
