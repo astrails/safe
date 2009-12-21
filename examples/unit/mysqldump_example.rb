@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../example_helper')
 
 describe Astrails::Safe::Mysqldump do
 
-  def def_config
+  def def_config(extra = {})
     {
       :options => "OPTS",
       :user => "User",
@@ -11,7 +11,7 @@ describe Astrails::Safe::Mysqldump do
       :port => 7777,
       :socket => "socket",
       :skip_tables => [:bar, :baz]
-    }
+    }.merge(extra)
   end
 
   def mysqldump(id = :foo, config = def_config)
@@ -66,17 +66,17 @@ describe Astrails::Safe::Mysqldump do
   end
 
   describe :mysql_password_file do
-    it "should create passwords file with quoted values" do
-      m = mysqldump
+    it "should create passwords file with quoted values", :focused => true do
+      m = mysqldump(:foo, def_config(:password => '#qwe"asd\'zxc'))
       file = m.send(:mysql_password_file)
       File.exists?(file).should == true
       File.read(file).should == <<-PWD
 [mysqldump]
-user = 'User'
-password = 'pwd'
-socket = 'socket'
-host = 'localhost'
-port = '7777'
+user = "User"
+password = "#qwe\\"asd'zxc"
+socket = "socket"
+host = "localhost"
+port = 7777
       PWD
     end
   end

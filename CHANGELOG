@@ -1,3 +1,5 @@
+* quote values in mysql password file
+
 0.2.6
 
 * fix typo in the template config file. (change option to options in pgdump)
