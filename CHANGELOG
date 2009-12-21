@@ -1,4 +1,5 @@
 * quote values in mysql password file
+* add 'lib' to $:
 
 0.2.6
 

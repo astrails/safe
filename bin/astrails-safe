@@ -2,8 +2,8 @@
 
 require 'rubygems'
 
-#require 'ruby-debug'
-#$:.unshift File.join(File.dirname(__FILE__), "..", "lib")
+# require 'ruby-debug'
+$:.unshift File.expand_path("../../lib", __FILE__)
 
 require 'astrails/safe'
 include Astrails::Safe
