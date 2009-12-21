@@ -1,5 +1,6 @@
 * quote values in mysql password file
 * add 'lib' to $:
+* [EXPERIMENTAL] Rackspace Cloud Files support
 
 0.2.6
 

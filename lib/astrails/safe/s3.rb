@@ -41,7 +41,6 @@ module Astrails
 
         return unless keep = @config[:keep, :s3]
 
-
         puts "listing files: #{bucket}:#{base}*" if $_VERBOSE
         files = AWS::S3::Bucket.objects(bucket, :prefix => base, :max_keys => keep * 2)
         puts files.collect {|x| x.key} if $_VERBOSE

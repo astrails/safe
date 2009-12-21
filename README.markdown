@@ -29,6 +29,10 @@ The following functionality was contributed by astrails-safe users:
 * Subversion dump using svndump (by Richard Luther <richard.luther@gmail.com>)
 * SFTP remote storage (by Adam <adam@mediadrive.ca>)
 * benchmarking output (By Neer)
+* README fixes (by Bobby Wilson)
+* improved config file parsing (by Fedor Kocherga <fkocherga@gmail.com>)
+* mysql password file quoting (by Jonathan Sutherland <jonathan.sutherland@gmail.com>)
+* Rackspace Cloud Files support (by H. Wade Minter <minter@lunenburg.org>)
 
 Thanks to all :)
 
@@ -51,7 +55,7 @@ Usage
       -h, --help           This help screen
       -v, --verbose        be verbose, duh!
       -n, --dry-run        just pretend, don't do anything.
-      -L, --local          skip S3 and Cloud Files
+      -L, --local          skip remote storage, only do local backups
 
 Note: CONFIG_FILE will be created from template if missing
 
@@ -132,7 +136,7 @@ Example configuration
       bucket "backup.astrails.com"
       path "servers/alpha/:kind/:id"
     end
-    
+
     cloudfiles do
       username "..........."
       api_key "................................."
@@ -140,7 +144,7 @@ Example configuration
       path ":kind/" # this is default
       service_net false
     end
-    
+
     sftp do
       host "sftp.astrails.com"
       user "astrails"
@@ -158,8 +162,9 @@ Example configuration
 
     keep do
       local 20
-      s3 30
-      cloudfiles 30
+      s3 100
+      cloudfiles 100
+      sftp 100
     end
 
     mysqldump do

@@ -23,12 +23,12 @@ safe do
 
   ## alternative style:
   # s3 :key => YOUR_S3_KEY, :secret => YOUR_S3_SECRET, :bucket => S3_BUCKET, :path => ":kind/"
-  
+
   ## uncomment to enable uploads to Rackspace Cloud Files
   ## http://www.rackspacecloud.com/cloud_hosting_products/files
   ## Rackspace auth (optional)
   # cloudfiles do
-  #   username "YOUR_RACKSPACE_CLOUD_USERNAME"
+  #   user "YOUR_RACKSPACE_CLOUD_USERNAME"
   #   api_key "YOUR_RACKSPACE_API_KEY"
   #   container "YOUR_CONTAINER_NAME"
   #   # path for uploads to Cloud Files, supports same substitution like :local/:path
@@ -37,10 +37,7 @@ safe do
   #   # to back up over the private (unbilled) service net, set this value to true.
   #   # service_net true
   # end
-  
-  ## alternative style:
-  # cloudfiles :username => YOUR_RACKSPACE_USERNAME, :api_key => YOUR_RACKSPACE_API_KEY, :container => CONTAINER_NAME, :path => ":kind/"
-  
+
   ## uncomment to enable uploads via SFTP
   # sftp do
   #   host "YOUR_REMOTE_HOSTNAME"
