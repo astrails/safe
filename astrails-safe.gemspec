@@ -8,10 +8,13 @@ Gem::Specification.new do |s|
   s.version = "0.2.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Astrails Ltd.", "Mark Mansour"]
+  s.authors = ["Astrails Ltd."]
   s.date = %q{2009-12-21}
   s.default_executable = %q{astrails-safe}
-  s.description = %q{Simple tool to backup databases (MySQL and PostgreSQL) and filesystem locally or to Amazon S3 (with optional encryption)}
+  s.description = %q{Astrails-Safe is a simple tool to backup databases (MySQL and PostgreSQL), Subversion repositories (with svndump) and just files.
+Backups can be stored locally or remotely and can be enctypted.
+Remote storage is supported on Amazon S3, Rackspace Cloud Files, or just plain SFTP.
+}
   s.email = %q{we@astrails.com}
   s.executables = ["astrails-safe"]
   s.extra_rdoc_files = [
@@ -39,6 +42,7 @@ Gem::Specification.new do |s|
      "lib/astrails/safe.rb",
      "lib/astrails/safe/archive.rb",
      "lib/astrails/safe/backup.rb",
+     "lib/astrails/safe/cloudfiles.rb",
      "lib/astrails/safe/config/builder.rb",
      "lib/astrails/safe/config/node.rb",
      "lib/astrails/safe/gpg.rb",
@@ -61,7 +65,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.5}
-  s.summary = %q{Backup filesystem and databases (MySQL and PostgreSQL) to Amazon S3 (with encryption)}
+  s.summary = %q{Backup filesystem and databases (MySQL and PostgreSQL) locally or to a remote server/service (with encryption)}
   s.test_files = [
     "examples/example_helper.rb",
      "examples/integration/archive_integration_example.rb",
@@ -83,13 +87,16 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<aws-s3>, [">= 0"])
+      s.add_runtime_dependency(%q<cloudfiles>, [">= 0"])
       s.add_runtime_dependency(%q<net-sftp>, [">= 0"])
     else
       s.add_dependency(%q<aws-s3>, [">= 0"])
+      s.add_dependency(%q<cloudfiles>, [">= 0"])
       s.add_dependency(%q<net-sftp>, [">= 0"])
     end
   else
     s.add_dependency(%q<aws-s3>, [">= 0"])
+    s.add_dependency(%q<cloudfiles>, [">= 0"])
     s.add_dependency(%q<net-sftp>, [">= 0"])
   end
 end

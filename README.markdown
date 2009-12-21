@@ -1,7 +1,7 @@
 astrails-safe
 =============
 
-Simple database and filesystem backups with S3 support (with optional encryption)
+Simple database and filesystem backups with S3 and Rackspace Cloud Files support (with optional encryption)
 
 Home: http://blog.astrails.com/astrails-safe
 
@@ -15,8 +15,8 @@ We needed a backup solution that will satisfy the following requirements:
 * support for simple ‘tar’ backups of directories (with includes/excludes)
 * support for simple mysqldump of mysql databases
 * support for symmetric or public key encryption
-* support for local filesystem and Amazon S3 for storage
-* support for backup rotation. we don’t want backups filling all the diskspace or cost a fortune on S3
+* support for local filesystem, Amazon S3, and Rackspace Cloud Files for storage
+* support for backup rotation. we don’t want backups filling all the diskspace or cost a fortune on S3 or Cloud Files
 
 And since we didn't find any, we wrote our own :)
 
@@ -51,7 +51,7 @@ Usage
       -h, --help           This help screen
       -v, --verbose        be verbose, duh!
       -n, --dry-run        just pretend, don't do anything.
-      -L, --local          skip S3
+      -L, --local          skip S3 and Cloud Files
 
 Note: CONFIG_FILE will be created from template if missing
 
@@ -132,7 +132,15 @@ Example configuration
       bucket "backup.astrails.com"
       path "servers/alpha/:kind/:id"
     end
-
+    
+    cloudfiles do
+      username "..........."
+      api_key "................................."
+      container "safe_backup"
+      path ":kind/" # this is default
+      service_net false
+    end
+    
     sftp do
       host "sftp.astrails.com"
       user "astrails"
@@ -151,6 +159,7 @@ Example configuration
     keep do
       local 20
       s3 30
+      cloudfiles 30
     end
 
     mysqldump do
