@@ -66,7 +66,7 @@ describe Astrails::Safe::Mysqldump do
   end
 
   describe :mysql_password_file do
-    it "should create passwords file with quoted values", :focused => true do
+    it "should create passwords file with quoted values" do
       m = mysqldump(:foo, def_config(:password => '#qwe"asd\'zxc'))
       file = m.send(:mysql_password_file)
       File.exists?(file).should == true
