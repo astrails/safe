@@ -12,7 +12,6 @@ safe do
 
   ## uncomment to enable uploads to Amazon S3
   ## Amazon S3 auth (optional)
-  ## don't forget to add :s3 to the 'store' list
   # s3 do
   #   key YOUR_S3_KEY
   #   secret YOUR_S3_SECRET
