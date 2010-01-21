@@ -49,6 +49,12 @@ safe do
   ## uncomment to enable GPG encryption.
   ## Note: you can use public 'key' or symmetric password but not both!
   # gpg do
+  #   # you can specify your own gpg executable with the 'command' options
+  #   # this can be useful for example to choose b/w gpg and gpg2 if both are installed
+  #   # some gpg installations will automatically set 'use-agent' option in the
+  #   # config file on the 1st run. see README for more details
+  #   options "--no-use-agent"
+  #   # command "/usr/local/bin/gpg"
   #   # key "backup@astrails.com"
   #   password "astrails"
   # end

@@ -102,28 +102,38 @@ describe Astrails::Safe::Gpg do
   describe :pipe do
 
     describe "with key" do
-      before(:each) do
-        @gpg = gpg(:gpg => {:key => "foo", :options => "GPG-OPT"}, :options => "OPT")
+      def kgpg(extra={})
+        gpg({:gpg => {:key => "foo", :options => "GPG-OPT"}.merge(extra), :options => "OPT"})
       end
 
       it "should not call gpg_password_file" do
-        dont_allow(@gpg).gpg_password_file(anything)
-        @gpg.send(:pipe)
+        g = kgpg
+        dont_allow(g).gpg_password_file(anything)
+        g.send(:pipe)
       end
 
       it "should use '-r' and :options" do
-        @gpg.send(:pipe).should == "|gpg GPG-OPT -e -r foo"
+        kgpg.send(:pipe).should == "|gpg GPG-OPT -e -r foo"
+      end
+
+      it "should use the 'command' options" do
+        kgpg(:command => 'other-gpg').send(:pipe).should == "|other-gpg GPG-OPT -e -r foo"
       end
     end
 
     describe "with password" do
-      before(:each) do
-        @gpg = gpg(:gpg => {:password => "bar", :options => "GPG-OPT"}, :options => "OPT")
-        stub(@gpg).gpg_password_file(anything) {"pass-file"}
+      def pgpg(extra = {})
+        returning(gpg({:gpg => {:password => "bar", :options => "GPG-OPT"}.merge(extra), :options => "OPT"})) do |g|
+          stub(g).gpg_password_file(anything) {"pass-file"}
+        end
       end
 
       it "should use '--passphrase-file' and :options" do
-        @gpg.send(:pipe).should == "|gpg GPG-OPT -c --passphrase-file pass-file"
+        pgpg.send(:pipe).should == "|gpg GPG-OPT -c --passphrase-file pass-file"
+      end
+
+      it "should use the 'command' options" do
+        pgpg(:command => 'other-gpg').send(:pipe).should == "|other-gpg GPG-OPT -c --passphrase-file pass-file"
       end
     end
   end

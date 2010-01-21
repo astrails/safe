@@ -9,10 +9,11 @@ module Astrails
       end
 
       def pipe
+        command = @config[:gpg, :command] || 'gpg'
         if key
-          "|gpg #{@config[:gpg, :options]} -e -r #{key}"
+          "|#{command} #{@config[:gpg, :options]} -e -r #{key}"
         elsif password
-          "|gpg #{@config[:gpg,:options]} -c --passphrase-file #{gpg_password_file(password)}"
+          "|#{command} #{@config[:gpg, :options]} -c --passphrase-file #{gpg_password_file(password)}"
         end
       end
 

@@ -1,3 +1,7 @@
+0.2.7
+
+* default options for gpg now include '--no-use-agent'
+* support for 'command' option for gpg
 * quote values in mysql password file
 * add 'lib' to $:
 * [EXPERIMENTAL] Rackspace Cloud Files support
