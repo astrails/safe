@@ -36,10 +36,17 @@ describe Astrails::Safe::Cloudfiles do
 
     before(:each) do
       @cloudfiles = cloudfiles
-      @files = [4,1,3,2].to_a.map { |i| stub(o = {}).name {"aaaaa#{i}"}; o }
-      mock.instance_of(CloudFiles::Container).objects(:prefix => "_kind/_id/_kind-_id.") { @files }
-      stub(CloudFiles::Authentication).new { true }
-      
+
+      @files = [4,1,3,2].to_a.map { |i| "aaaaa#{i}" }
+
+      @container = "container"
+
+      stub(@container).objects(:prefix => "_kind/_id/_kind-_id.") { @files }
+      stub(@container).delete_object(anything)
+
+      stub(CloudFiles::Connection).
+        new('_user', '_api_key', true, false).stub!.
+        container('_container') {@container}
     end
 
     it "should check [:keep, :cloudfiles]" do
@@ -49,8 +56,8 @@ describe Astrails::Safe::Cloudfiles do
     end
 
     it "should delete extra files" do
-      mock(CloudFiles::Connection).container("_container").mock!["aaaaa1"].mock!.delete
-      mock(CloudFiles::Connection).container("_container").mock!["aaaaa2"].mock!.delete
+      mock(@container).delete_object('aaaaa1')
+      mock(@container).delete_object('aaaaa2')
       @cloudfiles.send :cleanup
     end
 

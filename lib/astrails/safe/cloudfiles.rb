@@ -2,7 +2,7 @@ module Astrails
   module Safe
     class Cloudfiles < Sink
       MAX_CLOUDFILES_FILE_SIZE = 5368709120
-      
+
       protected
 
       def active?
@@ -42,7 +42,7 @@ module Astrails
         puts "listing files: #{container}:#{base}*" if $_VERBOSE
         cf = CloudFiles::Connection.new(user, api_key, true, service_net) unless $LOCAL
         cf_container = cf.container(container)
-        files = cf_container.objects(:prefix => base)
+        files = cf_container.objects(:prefix => base).sort
         print "DEBUG: Files is #{files.to_s}\n"
 
         cleanup_with_limit(files, keep) do |f|
