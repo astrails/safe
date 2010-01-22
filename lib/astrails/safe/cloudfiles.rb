@@ -41,11 +41,13 @@ module Astrails
 
         puts "listing files: #{container}:#{base}*" if $_VERBOSE
         cf = CloudFiles::Connection.new(user, api_key, true, service_net) unless $LOCAL
-        files = cf.container(container).objects(:prefix => base)
+        cf_container = cf.container(container)
+        files = cf_container.objects(:prefix => base)
+        print "DEBUG: Files is #{files.to_s}\n"
 
         cleanup_with_limit(files, keep) do |f|
           puts "removing Cloud File #{container}:#{f}" if $DRY_RUN || $_VERBOSE
-          cf.container(container).delete_object(f) unless $DRY_RUN || $LOCAL
+          cf_container.delete_object(f) unless $DRY_RUN || $LOCAL
         end
       end
 
