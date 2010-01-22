@@ -2,7 +2,7 @@ module Astrails
   module Safe
     class Cloudfiles < Sink
       MAX_CLOUDFILES_FILE_SIZE = 5368709120
-      
+
       protected
 
       def active?
@@ -27,7 +27,7 @@ module Astrails
           benchmark = Benchmark.realtime do
             cf_container = cf.create_container(container)
             o = cf_container.create_object(full_path,true)
-            o.write(open(@backup.path))
+            o.write(File.open(@backup.path))
           end
           puts "...done" if $_VERBOSE
           puts("Upload took " + sprintf("%.2f", benchmark) + " second(s).") if $_VERBOSE
@@ -42,8 +42,7 @@ module Astrails
         puts "listing files: #{container}:#{base}*" if $_VERBOSE
         cf = CloudFiles::Connection.new(user, api_key, true, service_net) unless $LOCAL
         cf_container = cf.container(container)
-        files = cf_container.objects(:prefix => base)
-        print "DEBUG: Files is #{files.to_s}\n"
+        files = cf_container.objects(:prefix => base).sort
 
         cleanup_with_limit(files, keep) do |f|
           puts "removing Cloud File #{container}:#{f}" if $DRY_RUN || $_VERBOSE

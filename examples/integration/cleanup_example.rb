@@ -47,7 +47,6 @@ describe "tar backup" do
   end
 
   it "should create backup file" do
-    puts "Expecting: #{@backup}"
     File.exists?(@backup).should be_true
   end
 
