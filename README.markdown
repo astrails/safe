@@ -147,7 +147,7 @@ Example configuration
     end
 
     cloudfiles do
-      username "..........."
+      user "..........."
       api_key "................................."
       container "safe_backup"
       path ":kind/" # this is default
