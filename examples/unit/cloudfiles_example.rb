@@ -67,27 +67,27 @@ describe Astrails::Safe::Cloudfiles do
     before(:each) do
       @cloudfiles = cloudfiles
     end
-  
+
     it "should be true when all params are set" do
       @cloudfiles.should be_active
     end
-  
+
     it "should be false if container is missing" do
       @cloudfiles.config[:cloudfiles].data["container"] = nil
       @cloudfiles.should_not be_active
     end
-  
+
     it "should be false if user is missing" do
       @cloudfiles.config[:cloudfiles].data["user"] = nil
       @cloudfiles.should_not be_active
     end
-  
+
     it "should be false if api_key is missing" do
       @cloudfiles.config[:cloudfiles].data["api_key"] = nil
       @cloudfiles.should_not be_active
     end
   end
-  
+
   describe :path do
     before(:each) do
       @cloudfiles = cloudfiles
@@ -97,18 +97,18 @@ describe Astrails::Safe::Cloudfiles do
       @cloudfiles.config[:local] = {:path => "local_path"}
       @cloudfiles.send(:path).should == "cloudfiles_path"
     end
-  
+
     it "should use local/path 2nd" do
       @cloudfiles.config[:local] = {:path => "local_path"}
       @cloudfiles.send(:path).should == "local_path"
     end
-  
+
     it "should use constant 3rd" do
       @cloudfiles.send(:path).should == "_kind/_id"
     end
-  
+
   end
-  
+
   describe :save do
     def add_stubs(*stubs)
       stubs.each do |s|
@@ -132,33 +132,33 @@ describe Astrails::Safe::Cloudfiles do
         end
       end
     end
-  
+
     before(:each) do
       @cloudfiles = cloudfiles(def_config, def_backup(:path => "foo"))
       @full_path = "_kind/_id/backup/somewhere/_kind-_id.NOW.bar.bar"
     end
-  
+
     it "should fail if no backup.file is set" do
       @cloudfiles.backup.path = nil
       proc {@cloudfiles.send(:save)}.should raise_error(RuntimeError)
     end
-  
+
     it "should establish Cloud Files connection" do
       add_stubs(:connection, :stat, :create_container, :file_open, :cloudfiles_store)
       @cloudfiles.send(:save)
     end
-  
+
     it "should open local file" do
       add_stubs(:connection, :stat, :create_container, :cloudfiles_store)
       mock(File).open("foo")
       @cloudfiles.send(:save)
     end
-  
+
     it "should upload file" do
       add_stubs(:connection, :stat, :create_container, :file_open, :cloudfiles_store)
       @cloudfiles.send(:save)
     end
-  
+
     it "should fail on files bigger then 5G" do
       add_stubs(:connection)
       mock(File).stat("foo").stub!.size {5*1024*1024*1024+1}
