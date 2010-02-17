@@ -1,0 +1,5 @@
+--colour
+--format specdoc
+--format profile:log/spec-benchmark.log
+--loadby mtime
+--reverse
