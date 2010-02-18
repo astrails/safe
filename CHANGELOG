@@ -1,3 +1,6 @@
+* check file size before attempting to upload to cloudfiles
+* testing framework changed from micronaut to rspec
+
 0.2.7
 
 * default options for gpg now include '--no-use-agent'
