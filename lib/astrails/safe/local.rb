@@ -17,6 +17,7 @@ module Astrails
       def save
         puts "command: #{@backup.command}" if $_VERBOSE
 
+        # FIXME: probably need to change this to smth like @backup.finalize!
         @backup.path = full_path # need to do it outside DRY_RUN so that it will be avialable for S3 DRY_RUN
 
         unless $DRY_RUN
@@ -33,6 +34,8 @@ module Astrails
         return unless keep = @config[:keep, :local]
 
         puts "listing files #{base}" if $_VERBOSE
+
+        # TODO: cleanup ALL zero-length files
 
         files = Dir["#{base}*"] .
           select{|f| File.file?(f) && File.size(f) > 0} .

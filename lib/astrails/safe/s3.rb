@@ -14,6 +14,7 @@ module Astrails
       end
 
       def save
+        # FIXME: user friendly error here :)
         raise RuntimeError, "pipe-streaming not supported for S3." unless @backup.path
 
         # needed in cleanup even on dry run

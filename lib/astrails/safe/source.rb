@@ -30,6 +30,7 @@ module Astrails
         )
         # can't do this in the initializer hash above since
         # filename() calls expand() which requires @backup
+        # FIXME: move expansion to the backup (last step in ctor) assign :tags here
         @backup.filename = filename
         @backup
       end

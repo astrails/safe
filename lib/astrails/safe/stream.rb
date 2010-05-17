@@ -7,6 +7,7 @@ module Astrails
         @config, @backup = config, backup
       end
 
+      # FIXME: move to Backup
       def expand(path)
         path .
         gsub(/:kind\b/, @backup.kind.to_s) .
