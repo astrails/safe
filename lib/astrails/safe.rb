@@ -16,8 +16,6 @@ require 'astrails/safe/stream'
 
 require 'astrails/safe/backup'
 
-require 'astrails/safe/backup'
-
 require 'astrails/safe/source'
 require 'astrails/safe/mysqldump'
 require 'astrails/safe/pgdump'
