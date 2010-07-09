@@ -3,7 +3,10 @@ astrails-safe
 
 Simple database and filesystem backups with S3 and Rackspace Cloud Files support (with optional encryption)
 
-Home: http://blog.astrails.com/astrails-safe
+* Home: [http://astrails.com/opensource/astrails-safe](http://astrails.com/opensource/astrails-safe)
+* Code: [http://github.com/astrails/safe](http://github.com/astrails/safe)
+* Blog: [http://blog.astrails.com/astrails-safe](http://blog.astrails.com/astrails-safe)
+
 
 Motivation
 ----------
