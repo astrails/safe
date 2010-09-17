@@ -40,7 +40,7 @@ describe Astrails::Safe::S3 do
       @files = [4,1,3,2].to_a.map { |i| stub(o = {}).key {"aaaaa#{i}"}; o }
 
       stub(AWS::S3::Bucket).objects("_bucket", :prefix => "_kind/_id/_kind-_id.", :max_keys => 4) {@files}
-      stub(AWS::S3::Bucket).find("_bucket").stub![anything].stub!.delete
+      stub(AWS::S3::Bucket).objects("_bucket", :prefix => anything).stub![0].stub!.delete
     end
 
     it "should check [:keep, :s3]" do
@@ -50,8 +50,8 @@ describe Astrails::Safe::S3 do
     end
 
     it "should delete extra files" do
-      mock(AWS::S3::Bucket).find("_bucket").mock!["aaaaa1"].mock!.delete
-      mock(AWS::S3::Bucket).find("_bucket").mock!["aaaaa2"].mock!.delete
+      mock(AWS::S3::Bucket).objects("_bucket", :prefix => "aaaaa1").mock![0].mock!.delete
+      mock(AWS::S3::Bucket).objects("_bucket", :prefix => "aaaaa2").mock![0].mock!.delete
       @s3.send :cleanup
     end
 
