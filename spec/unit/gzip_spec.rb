@@ -43,21 +43,21 @@ describe Astrails::Safe::Gzip do
 
     describe "when already compressed" do
 
-      before(:each) { @gzip = gzip({}, :compressed => true) }
+      before(:each) { @gzip = gzip({}, :extension => ".foo", :command => "foobar", :compressed => true) }
 
       it "should not touch extension" do
-        dont_allow(@backup.extension).<< anything
         @gzip.process
+        @backup.extension.should == ".foo"
       end
 
       it "should not touch command" do
-        dont_allow(@backup.command).<< anything
         @gzip.process
+        @backup.command.should == "foobar"
       end
 
       it "should not touch compressed" do
-        dont_allow(@backup).compressed = anything
         @gzip.process
+        @backup.compressed.should == true
       end
     end
   end
