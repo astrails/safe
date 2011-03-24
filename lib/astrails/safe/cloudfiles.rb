@@ -13,6 +13,13 @@ module Astrails
         @path ||= expand(config[:cloudfiles, :path] || config[:local, :path] || ":kind/:id")
       end
 
+      # UGLY: we need this function for the reason that
+      # we can't double mock on ruby 1.9.2, duh!
+      # so we created this func to mock it all together
+      def get_file_size(path)
+        File.stat(path).size
+      end
+
       def save
         raise RuntimeError, "pipe-streaming not supported for S3." unless @backup.path
 
@@ -20,7 +27,7 @@ module Astrails
         cf = CloudFiles::Connection.new(user, api_key, true, service_net) unless $LOCAL
         puts "Uploading #{container}:#{full_path} from #{@backup.path}" if $_VERBOSE || $DRY_RUN
         unless $DRY_RUN || $LOCAL
-          if File.stat(@backup.path).size > MAX_CLOUDFILES_FILE_SIZE
+          if get_file_size(@backup.path) > MAX_CLOUDFILES_FILE_SIZE
             STDERR.puts "ERROR: File size exceeds maximum allowed for upload to Cloud Files (#{MAX_CLOUDFILES_FILE_SIZE}): #{@backup.path}"
             return
           end

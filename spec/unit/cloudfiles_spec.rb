@@ -114,21 +114,21 @@ describe Astrails::Safe::Cloudfiles do
       stubs.each do |s|
         case s
         when :connection
+          @connection = "connection"
           stub(CloudFiles::Authentication).new
           stub(CloudFiles::Connection).
-            new('_user', '_api_key', true, false).stub!.
-            create_container('_container') {@container}
-        when :stat
-          stub(File).stat("foo").stub!.size {123}
+            new('_user', '_api_key', true, false) {@connection}
+        when :file_size
+          stub(@cloudfiles).get_file_size("foo") {123}
         when :create_container
           @container = "container"
           stub(@container).create_object("_kind/_id/backup/somewhere/_kind-_id.NOW.bar.bar", true) {@object}
-          stub(CloudFiles::Connection).create_container {@container}
+          stub(@connection).create_container {@container}
         when :file_open
           stub(File).open("foo")
         when :cloudfiles_store
           @object = "object"
-          mock(@object).write(nil) {true}
+          stub(@object).write(nil) {true}
         end
       end
     end
@@ -144,18 +144,25 @@ describe Astrails::Safe::Cloudfiles do
     end
 
     it "should establish Cloud Files connection" do
-      add_stubs(:connection, :stat, :create_container, :file_open, :cloudfiles_store)
+      add_stubs(:connection, :file_size, :create_container, :file_open, :cloudfiles_store)
       @cloudfiles.send(:save)
     end
 
     it "should open local file" do
-      add_stubs(:connection, :stat, :create_container, :cloudfiles_store)
+      add_stubs(:connection, :file_size, :create_container, :cloudfiles_store)
       mock(File).open("foo")
       @cloudfiles.send(:save)
     end
 
+    it "should call write on the cloudfile object with files' descriptor" do
+      add_stubs(:connection, :file_size, :create_container, :cloudfiles_store)
+      stub(File).open("foo") {"qqq"}
+      mock(@object).write("qqq") {true}
+      @cloudfiles.send(:save)
+    end
+
     it "should upload file" do
-      add_stubs(:connection, :stat, :create_container, :file_open, :cloudfiles_store)
+      add_stubs(:connection, :file_size, :create_container, :file_open, :cloudfiles_store)
       @cloudfiles.send(:save)
     end
 
