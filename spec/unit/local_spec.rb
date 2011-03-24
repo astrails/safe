@@ -87,7 +87,7 @@ describe Astrails::Safe::Local do
 
   describe :cleanup do
     before(:each) do
-      @files = [4,1,3,2].to_a.map { |i| "/mysqldump~blog~NoW/qweqwe.#{i}" }
+      @files = [4,1,3,2].map { |i| "/mysqldump~blog~NoW/qweqwe.#{i}" }
       stub(File).file?(anything) {true}
       stub(File).size(anything) {1}
       stub(File).unlink

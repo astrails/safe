@@ -4,7 +4,7 @@ require 'spec'
 require 'spec/autorun'
 
 require 'rubygems'
-require 'ruby-debug'
+#require 'ruby-debug'
 
 require 'astrails/safe'
 

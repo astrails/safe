@@ -38,7 +38,7 @@ module Astrails
           else
             raise(ArgumentError, "#{key}: no block supported for simple values") if block
             if @data[key.to_s]
-              @data[key.to_s] = @data[key.to_s].to_a + value.to_a
+              @data[key.to_s] = [*@data[key.to_s]] + [value]
             else
               @data[key.to_s] = value
             end

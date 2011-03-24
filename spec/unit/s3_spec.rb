@@ -37,7 +37,7 @@ describe Astrails::Safe::S3 do
     before(:each) do
       @s3 = s3
 
-      @files = [4,1,3,2].to_a.map { |i| stub(o = {}).key {"aaaaa#{i}"}; o }
+      @files = [4,1,3,2].map { |i| stub(o = {}).key {"aaaaa#{i}"}; o }
 
       stub(AWS::S3::Bucket).objects("_bucket", :prefix => "_kind/_id/_kind-_id.", :max_keys => 4) {@files}
       stub(AWS::S3::Bucket).find("_bucket").stub![anything].stub!.delete

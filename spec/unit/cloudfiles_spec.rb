@@ -37,7 +37,7 @@ describe Astrails::Safe::Cloudfiles do
     before(:each) do
       @cloudfiles = cloudfiles
 
-      @files = [4,1,3,2].to_a.map { |i| "aaaaa#{i}" }
+      @files = [4,1,3,2].map { |i| "aaaaa#{i}" }
 
       @container = "container"
 
