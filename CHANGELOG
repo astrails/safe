@@ -1,3 +1,7 @@
+0.2.8
+
+* ruby 1.9.2 compatibility (tests mostly)
+* code review, and tons of small fixes
 * check file size before attempting to upload to cloudfiles
 * testing framework changed from micronaut to rspec
 
