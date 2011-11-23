@@ -32,6 +32,8 @@ require 'astrails/safe/s3'
 require 'astrails/safe/cloudfiles'
 require 'astrails/safe/sftp'
 
+require 'astrails/safe/version'
+
 module Astrails
   module Safe
     ROOT = File.join(File.dirname(__FILE__), "..", "..")
