@@ -105,6 +105,12 @@ describe Astrails::Safe::Config do
         end
       end
 
+      mongodump do
+        host "host"
+        database "database"
+        user "user"
+        password "password"
+      end
     end
 
     expected = {
@@ -183,6 +189,15 @@ describe Astrails::Safe::Config do
           "misc" => { "files" => ["/backup/*.rb"] },
         },
       },
+      
+      "mongodump" => {
+        "host" => "host",
+        "databases" => {
+          "database" => {}
+        },
+        "user" => "user",
+        "password" => "password"
+      }      
     }
 
     config.to_hash.should == expected
