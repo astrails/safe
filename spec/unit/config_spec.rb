@@ -3,6 +3,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Astrails::Safe::Config do
   it "should parse example config" do
     config = Astrails::Safe::Config::Node.new do
+      airbrake do
+        api_key "test_airbrake_api_key"
+      end
+
       local do
         path "path"
       end
@@ -110,6 +114,8 @@ describe Astrails::Safe::Config do
     end
 
     expected = {
+      "airbrake" => {"api_key" => "test_airbrake_api_key"},
+
       "local" => {"path" => "path"},
 
       "s3" => {

@@ -2,28 +2,37 @@ PATH
   remote: .
   specs:
     astrails-safe (0.2.9)
-      aws-s3 (~> 0.6.2)
+      aws-sdk (~> 1.2.3)
       cloudfiles (~> 1.4.7)
       net-sftp (~> 2.0.4)
+      toadhopper (~> 2.0)
 
 GEM
   remote: http://rubygems.org/
   specs:
-    aws-s3 (0.6.2)
-      builder
-      mime-types
-      xml-simple
-    builder (3.0.0)
-    cloudfiles (1.4.7)
+    aws-sdk (1.2.3)
+      httparty (~> 0.7)
+      json (~> 1.4)
+      nokogiri (>= 1.4.4)
+      uuidtools (~> 2.1)
+    cloudfiles (1.4.18)
       mime-types (>= 1.16)
+    httparty (0.8.1)
+      multi_json
+      multi_xml
+    json (1.6.2)
     mime-types (1.17.2)
-    net-sftp (2.0.4)
+    multi_json (1.0.4)
+    multi_xml (0.4.1)
+    net-sftp (2.0.5)
       net-ssh (>= 2.0.9)
     net-ssh (2.2.1)
+    nokogiri (1.5.0)
     rake (0.8.7)
     rr (1.0.4)
     rspec (1.3.2)
-    xml-simple (1.1.1)
+    toadhopper (2.0)
+    uuidtools (2.1.2)
 
 PLATFORMS
   ruby
