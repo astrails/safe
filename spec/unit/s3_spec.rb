@@ -5,7 +5,7 @@ describe Astrails::Safe::S3 do
   def def_config
     {
       :s3 => {
-        :bucket => "_bucket",
+        :bucket => "bucket_name",
         :key    => "_key",
         :secret => "_secret",
       },
@@ -37,10 +37,12 @@ describe Astrails::Safe::S3 do
     before(:each) do
       @s3 = s3
 
-      @files = [4,1,3,2].map { |i| stub(o = {}).key {"aaaaa#{i}"}; o }
+      @files = [4,1,3,2].map do |i|
+        stub(object = Object.new).key { "aaaaa#{i}" }
+        object
+      end
 
-      stub(AWS::S3::Bucket).objects("_bucket", :prefix => "_kind/_id/_kind-_id.", :max_keys => 4) {@files}
-      stub(AWS::S3::Bucket).find("_bucket").stub![anything].stub!.delete
+      stub(@s3).remote_bucket.stub!.objects.stub!.with_prefix(:prefix => '_kind/_id/_kind-_id.') { @files }
     end
 
     it "should check [:keep, :s3]" do
@@ -50,8 +52,10 @@ describe Astrails::Safe::S3 do
     end
 
     it "should delete extra files" do
-      mock(AWS::S3::Bucket).find("_bucket").mock!["aaaaa1"].mock!.delete
-      mock(AWS::S3::Bucket).find("_bucket").mock!["aaaaa2"].mock!.delete
+      dont_allow(@files[0]).delete
+      mock(@files[1]).delete
+      dont_allow(@files[2]).delete
+      mock(@files[3]).delete
       @s3.send :cleanup
     end
 
@@ -107,16 +111,14 @@ describe Astrails::Safe::S3 do
     def add_stubs(*stubs)
       stubs.each do |s|
         case s
-        when :connection
-          stub(AWS::S3::Base).establish_connection!(:access_key_id => "_key", :secret_access_key => "_secret", :use_ssl => true)
         when :stat
           stub(File).stat("foo").stub!.size {123}
         when :create_bucket
-          stub(AWS::S3::Bucket).create
+          stub.instance_of(AWS::S3).buckets.stub!.create.stub!
         when :file_open
           stub(File).open("foo") {|f, block| block.call(:opened_file)}
         when :s3_store
-          stub(AWS::S3::S3Object).store(@full_path, :opened_file, "_bucket")
+          stub.instance_of(AWS::S3).buckets.stub!.create.stub!.objects.stub!.create(@full_path, :data => :opened_file)
         end
       end
     end
@@ -132,25 +134,26 @@ describe Astrails::Safe::S3 do
     end
 
     it "should establish s3 connection" do
-      mock(AWS::S3::Base).establish_connection!(:access_key_id => "_key", :secret_access_key => "_secret", :use_ssl => true)
+      connection = AWS::S3.new(:access_key_id => "_key", :secret_access_key => "_secret")
+      mock(AWS::S3).new(:access_key_id => "_key", :secret_access_key => "_secret") { connection }
       add_stubs(:stat, :create_bucket, :file_open, :s3_store)
+
       @s3.send(:save)
     end
 
     it "should open local file" do
-      add_stubs(:connection, :stat, :create_bucket)
+      add_stubs(:stat, :create_bucket)
       mock(File).open("foo")
       @s3.send(:save)
     end
 
     it "should upload file" do
-      add_stubs(:connection, :stat, :create_bucket, :file_open)
-      mock(AWS::S3::S3Object).store(@full_path, :opened_file, "_bucket")
+      add_stubs(:stat, :create_bucket, :file_open)
+      mock(@s3).remote_bucket.mock!.objects.mock!.create(@full_path, :data => :opened_file)
       @s3.send(:save)
     end
 
     it "should fail on files bigger then 5G" do
-      add_stubs(:connection)
       mock(File).stat("foo").stub!.size {5*1024*1024*1024+1}
       mock(STDERR).puts(anything)
       dont_allow(Benchmark).realtime
