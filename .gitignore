@@ -7,3 +7,5 @@ tmp
 *~
 tags
 log/
+.bundle/
+vendor/bundle
