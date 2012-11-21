@@ -52,7 +52,7 @@ module Astrails
 
         cleanup_with_limit(files, keep) do |f|
           puts "removing s3 file #{bucket}:#{f}" if $DRY_RUN || $_VERBOSE
-          AWS::S3::Bucket.find(bucket)[f].delete unless $DRY_RUN || $LOCAL
+          AWS::S3::Bucket.objects(bucket, :prefix => f)[0].delete unless $DRY_RUN || $LOCAL
         end
       end
 
