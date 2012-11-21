@@ -112,6 +112,7 @@ describe Astrails::Safe::S3 do
         when :stat
           stub(File).stat("foo").stub!.size {123}
         when :create_bucket
+          stub(AWS::S3::Bucket).find('_bucket') { raise_error AWS::S3::NoSuchBucket }
           stub(AWS::S3::Bucket).create
         when :file_open
           stub(File).open("foo") {|f, block| block.call(:opened_file)}
@@ -154,6 +155,13 @@ describe Astrails::Safe::S3 do
       mock(File).stat("foo").stub!.size {5*1024*1024*1024+1}
       mock(STDERR).puts(anything)
       dont_allow(Benchmark).realtime
+      @s3.send(:save)
+    end
+    
+    it 'should not create a bucket that already exists' do
+      add_stubs(:connection, :stat, :file_open, :s3_store)
+      stub(AWS::S3::Bucket).find('_bucket') { true }
+      dont_allow(AWS::S3::Bucket).create
       @s3.send(:save)
     end
   end
