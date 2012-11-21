@@ -27,7 +27,7 @@ module Astrails
             return
           end
           benchmark = Benchmark.realtime do
-            AWS::S3::Bucket.create(bucket)
+            AWS::S3::Bucket.create(bucket) unless bucket_exists?(bucket)
             File.open(@backup.path) do |file|
               AWS::S3::S3Object.store(full_path, file, bucket)
             end
@@ -68,6 +68,13 @@ module Astrails
         @config[:s3, :secret]
       end
 
+      private
+      
+      def bucket_exists?(bucket)
+        true if AWS::S3::Bucket.find(bucket)
+      rescue AWS::S3::NoSuchBucket
+        false
+      end
     end
   end
 end
