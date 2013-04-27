@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.default_executable = %q{astrails-safe}
   s.description = %q{Astrails-Safe is a simple tool to backup databases (MySQL and PostgreSQL), Subversion repositories (with svndump) and just files.
 Backups can be stored locally or remotely and can be enctypted.
-Remote storage is supported on Amazon S3, Rackspace Cloud Files, or just plain SFTP.
+Remote storage is supported on Amazon S3, Rackspace Cloud Files, or just plain FTP/SFTP.
 }
   s.email = %q{we@astrails.com}
   s.executables = ["astrails-safe"]
@@ -42,6 +42,7 @@ Remote storage is supported on Amazon S3, Rackspace Cloud Files, or just plain S
     "lib/astrails/safe/pipe.rb",
     "lib/astrails/safe/s3.rb",
     "lib/astrails/safe/sftp.rb",
+    "lib/astrails/safe/ftp.rb",
     "lib/astrails/safe/sink.rb",
     "lib/astrails/safe/source.rb",
     "lib/astrails/safe/stream.rb",
