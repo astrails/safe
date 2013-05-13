@@ -46,6 +46,15 @@ safe do
   #   path ":kind/:id" # this is the default
   # end
 
+  ## uncomment to enable uploads via FTP
+  # ftp do
+  #   host "YOUR_REMOTE_HOSTNAME"
+  #   user "YOUR_REMOTE_USERNAME"
+  #   # port "NON STANDARD FTP PORT"
+  #   password "YOUR_REMOTE_PASSWORD"
+  #   path ":kind/:id" # this is the default
+  # end
+
   ## uncomment to enable GPG encryption.
   ## Note: you can use public 'key' or symmetric password but not both!
   # gpg do
