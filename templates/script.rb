@@ -79,7 +79,7 @@ safe do
 
     # database is a 'collection' element. it must have a hash or block parameter
     # it will be 'collected' in a 'databases', with database id (1st arg) used as hash key
-    # the following code will create mysqldump/databases/blog and mysqldump/databases/mysql ocnfiguration 'nodes'
+    # the following code will create mysqldump/databases/blog and mysqldump/databases/mysql configuration 'nodes'
 
     # backup database with default values
     # database :blog
