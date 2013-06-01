@@ -6,6 +6,7 @@ Simple database and filesystem backups with S3 and Rackspace Cloud Files support
 * Code: [http://github.com/astrails/safe](http://github.com/astrails/safe)
 * Blog: [http://blog.astrails.com/astrails-safe](http://blog.astrails.com/astrails-safe)
 
+[![Build Status](https://travis-ci.org/astrails/safe.png)](https://travis-ci.org/astrails/safe)
 [![Code Climate](https://codeclimate.com/github/astrails/safe.png)](https://codeclimate.com/github/astrails/safe)
 
 ## Motivation
