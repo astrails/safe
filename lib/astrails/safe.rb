@@ -1,3 +1,5 @@
+require "astrails/safe/version"
+
 require "aws/s3"
 require "cloudfiles"
 require 'net/sftp'
@@ -47,8 +49,8 @@ module Astrails
        [Svndump,   [:svndump,   :repos]]
       ].each do |klass, path|
         if collection = config[*path]
-          collection.each do |name, config|
-            klass.new(name, config).backup.run(config, :gpg, :gzip, :local, :s3, :cloudfiles, :sftp)
+          collection.each do |name, c|
+            klass.new(name, c).backup.run(c, :gpg, :gzip, :local, :s3, :cloudfiles, :sftp)
           end
         end
       end

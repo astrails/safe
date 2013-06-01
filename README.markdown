@@ -1,5 +1,4 @@
-astrails-safe
-=============
+# astrails-safe
 
 Simple database and filesystem backups with S3 and Rackspace Cloud Files support (with optional encryption)
 
@@ -9,8 +8,7 @@ Simple database and filesystem backups with S3 and Rackspace Cloud Files support
 
 [![Code Climate](https://codeclimate.com/github/astrails/safe.png)](https://codeclimate.com/github/astrails/safe)
 
-Motivation
-----------
+## Motivation
 
 We needed a backup solution that will satisfy the following requirements:
 
@@ -24,8 +22,7 @@ We needed a backup solution that will satisfy the following requirements:
 
 And since we didn't find any, we wrote our own :)
 
-Contributions
--------------
+## Contributions
 
 The following functionality was contributed by astrails-safe users:
 
@@ -40,18 +37,15 @@ The following functionality was contributed by astrails-safe users:
 
 Thanks to all :)
 
-Installation
-------------
+## Installation
 
     sudo gem install astrails-safe --source http://gemcutter.org
 
-Reporting problems
-------------------
+## Reporting problems
 
 Please report problems at the [Issues tracker](http://github.com/astrails/safe/issues)
 
-Usage
------
+## Usage
 
     Usage:
        astrails-safe [OPTIONS] CONFIG_FILE
@@ -63,8 +57,7 @@ Usage
 
 Note: CONFIG\_FILE will be created from template if missing
 
-Encryption
-----------
+## Encryption
 
 If you want to encrypt your backups you have 2 options:
 * use simple password encryption
@@ -135,8 +128,7 @@ The procedure to create and transfer the key is as follows:
 
 
 
-Example configuration
----------------------
+## Example configuration
 
     safe do
       local :path => "/backup/:kind/:id"
@@ -232,7 +224,14 @@ Example configuration
       end
     end
 
-Copyright
----------
+## Contributing
 
-Copyright (c) 2010 Astrails Ltd. See LICENSE for details.
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
+## Copyright
+
+Copyright (c) 2010 Astrails Ltd. See LICENSE.txt for details.
