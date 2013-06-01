@@ -235,4 +235,4 @@ The procedure to create and transfer the key is as follows:
 
 ## Copyright
 
-Copyright (c) 2010 Astrails Ltd. See LICENSE.txt for details.
+Copyright (c) 2010-2013 Astrails Ltd. See LICENSE.txt for details.
