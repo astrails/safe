@@ -55,7 +55,7 @@ describe "tar backup" do
   end
 
   it "should NOT remove backups with base having same prefix" do
-    Dir["#{@dst}/archive/archive-foobar.*"].should == ["#{@dst}/archive/archive-foobar.000001.tar.gz", "#{@dst}/archive/archive-foobar.000002.tar.gz"]
+    Dir["#{@dst}/archive/archive-foobar.*"].sort.should == ["#{@dst}/archive/archive-foobar.000001.tar.gz", "#{@dst}/archive/archive-foobar.000002.tar.gz"]
   end
 
 end
