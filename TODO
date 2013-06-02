@@ -5,6 +5,7 @@
   - module registry
   - base => prefix ?
   - move requires into specific modules
+	- config.foo instead of config[:foo]
 
 - features
   - remote-only s3 support

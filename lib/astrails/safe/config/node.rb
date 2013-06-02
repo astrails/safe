@@ -15,7 +15,7 @@ module Astrails
         def get(*path)
           key = path.shift
           value = @data[key.to_s]
-          return value if value && path.empty?
+          return value if (nil != value) && path.empty?
 
           value && value.get(*path)
         end
@@ -46,6 +46,12 @@ module Astrails
           end
         end
         alias :[]= :set
+
+        # allows to override values from the configuration block
+        # used to (re)set global options from commandline
+        def reset(key, value)
+          @data[key.to_s] = value
+        end
 
         def each(&block)
           @data.each(&block)

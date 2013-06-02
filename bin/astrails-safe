@@ -25,27 +25,40 @@ END
   exit 1
 end
 
-def process_options
-  usage if ARGV.delete("-h") || ARGV.delete("--help")
-  $_VERBOSE = ARGV.delete("-v") || ARGV.delete("--verbose")
-  $DRY_RUN = ARGV.delete("-n") || ARGV.delete("--dry-run")
-  $LOCAL   = ARGV.delete("-L") || ARGV.delete("--local")
-  usage unless ARGV.first
-  $CONFIG_FILE_NAME = File.expand_path(ARGV.first)
-end
-
+OPTS = [
+  '-h', '--help',
+  '-v', '--verbose', '--not-verbose',
+  '-n', '--dry-run', '--not-dry-run',
+  '-L', '--local', '--not-local'
+]
 def main
-  process_options
+  opts = ARGV & OPTS
+  args = ARGV - OPTS
 
-  unless File.exists?($CONFIG_FILE_NAME)
-    die "Missing configuration file. NOT CREATED! Rerun w/o the -n argument to create a template configuration file." if $DRY_RUN
+  usage unless args.first
+  usage if opts.delete("-h") || opts.delete("--help")
 
-    FileUtils.cp File.join(Astrails::Safe::ROOT, "templates", "script.rb"), $CONFIG_FILE_NAME
+  config_file = File.expand_path(args.first)
 
-    die "Created default #{$CONFIG_FILE_NAME}. Please edit and run again."
+  unless File.exists?(config_file)
+    die "Missing configuration file. NOT CREATED! Rerun w/o the -n argument to create a template configuration file." if config[:dry_run]
+
+    FileUtils.cp File.join(Astrails::Safe::ROOT, "templates", "script.rb"), config_file
+
+    die "Created default #{config_file}. Please edit and run again."
   end
 
-  config = eval(File.read $CONFIG_FILE_NAME)
+  config = eval(File.read(config_file))
+
+  config.reset(:verbose,    true)  if opts.delete('-v') || opts.delete('--verbose')
+  config.reset(:verbose,    false) if opts.delete('--not-verbose')
+
+  config.reset(:dry_run,    true)  if opts.delete('-n') || opts.delete('--dry-run')
+  config.reset(:dry_run,    false) if opts.delete('--not-dry-run')
+
+  config.reset(:local_only, true)  if opts.delete('-L') || opts.delete('--local')
+  config.reset(:local_only, false) if opts.delete('--not-local')
+
   process config
 end
 

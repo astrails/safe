@@ -73,8 +73,7 @@ describe Astrails::Safe::Local do
     end
 
     describe "dry run" do
-      before(:all) {$DRY_RUN = true}
-      after(:all)  {$DRY_RUN = false}
+      before(:each) { @local.config.reset :dry_run, true }
 
       it "should not create directory"
       it "should not call system"
