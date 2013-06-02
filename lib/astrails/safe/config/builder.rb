@@ -4,7 +4,7 @@ module Astrails
       class Builder
         COLLECTIONS = %w/database archive repo/
         ITEMS = %w/s3 cloudfiles key secret bucket api_key container service_net path gpg password keep local mysqldump pgdump command options
-        user host port socket skip_tables tar files exclude filename svndump repo_path sftp ftp mongodump/
+        user host port socket skip_tables tar files exclude filename svndump repo_path sftp ftp mongodump verbose dry_run local_only/
         NAMES = COLLECTIONS + ITEMS
         def initialize(node)
           @node = node
@@ -33,7 +33,9 @@ module Astrails
           #puts "#{sym}: args=#{args.inspect}, id_or_value=#{id_or_value}, data=#{data.inspect}, block=#{block.inspect}"
 
           raise "#{sym}: unexpected: #{args.inspect}" unless args.empty?
-          raise "#{sym}: missing arguments" unless id_or_value || data || block
+          unless (nil != id_or_value) || data || block
+            raise "#{sym}: missing arguments"
+          end
 
           if COLLECTIONS.include?(sym.to_s) && id_or_value
             data ||= {}

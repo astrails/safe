@@ -3,6 +3,11 @@ require 'spec_helper'
 describe Astrails::Safe::Config do
   it "should parse example config" do
     config = Astrails::Safe::Config::Node.new do
+
+      dry_run false
+      local_only true
+      verbose true
+
       local do
         path "path"
       end
@@ -110,6 +115,10 @@ describe Astrails::Safe::Config do
     end
 
     expected = {
+      "dry_run" => false,
+      "local_only" => true,
+      "verbose" => true,
+
       "local" => {"path" => "path"},
 
       "s3" => {
