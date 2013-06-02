@@ -24,6 +24,7 @@ require 'astrails/safe/mysqldump'
 require 'astrails/safe/pgdump'
 require 'astrails/safe/archive'
 require 'astrails/safe/svndump'
+require 'astrails/safe/mongodump'
 
 require 'astrails/safe/pipe'
 require 'astrails/safe/gpg'
@@ -47,6 +48,7 @@ module Astrails
 
       [[Mysqldump, [:mysqldump, :databases]],
        [Pgdump,    [:pgdump,    :databases]],
+       [Mongodump, [:mongodump, :databases]],
        [Archive,   [:tar,       :archives]],
        [Svndump,   [:svndump,   :repos]]
       ].each do |klass, path|

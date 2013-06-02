@@ -4,7 +4,7 @@ module Astrails
       class Builder
         COLLECTIONS = %w/database archive repo/
         ITEMS = %w/s3 cloudfiles key secret bucket api_key container service_net path gpg password keep local mysqldump pgdump command options
-        user host port socket skip_tables tar files exclude filename svndump repo_path sftp ftp /
+        user host port socket skip_tables tar files exclude filename svndump repo_path sftp ftp mongodump/
         NAMES = COLLECTIONS + ITEMS
         def initialize(node)
           @node = node
