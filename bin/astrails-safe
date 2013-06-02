@@ -45,7 +45,8 @@ def main
     die "Created default #{$CONFIG_FILE_NAME}. Please edit and run again."
   end
 
-  load($CONFIG_FILE_NAME)
+  config = eval(File.read $CONFIG_FILE_NAME)
+  process config
 end
 
 main
