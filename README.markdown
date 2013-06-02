@@ -35,6 +35,7 @@ The following functionality was contributed by astrails-safe users:
 * improved config file parsing (by Fedor Kocherga <fkocherga@gmail.com>)
 * mysql password file quoting (by Jonathan Sutherland <jonathan.sutherland@gmail.com>)
 * Rackspace Cloud Files support (by H. Wade Minter <minter@lunenburg.org>)
+* Plan FTP support (by seroy)
 
 Thanks to all :)
 
