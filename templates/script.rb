@@ -1,4 +1,12 @@
 safe do
+  # same as --verbose on the command line
+  # verbose true
+
+  # same as --local on the command line
+  # local_only true
+
+  # same as --dry-run on the command line
+  # dry_run true
 
   # backup file path (not including filename)
   # supported substitutions:
