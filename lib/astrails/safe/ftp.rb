@@ -38,7 +38,7 @@ module Astrails
       def cleanup
         return if $LOCAL || $DRY_RUN
 
-        return unless keep = @config[:keep, :ftp]
+        return unless keep = config[:keep, :ftp]
 
         puts "listing files: #{host}:#{base}*" if $_VERBOSE
         if !port
@@ -65,19 +65,19 @@ module Astrails
       end
 
       def host
-        @config[:ftp, :host]
+        config[:ftp, :host]
       end
 
       def user
-        @config[:ftp, :user]
+        config[:ftp, :user]
       end
 
       def password
-        @config[:ftp, :password]
+        config[:ftp, :password]
       end
 
       def port
-        @config[:ftp, :port]
+        config[:ftp, :port]
       end
 
     end

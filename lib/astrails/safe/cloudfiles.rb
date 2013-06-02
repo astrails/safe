@@ -44,7 +44,7 @@ module Astrails
       def cleanup
         return if $LOCAL
 
-        return unless keep = @config[:keep, :cloudfiles]
+        return unless keep = config[:keep, :cloudfiles]
 
         puts "listing files: #{container}:#{base}*" if $_VERBOSE
         cf = CloudFiles::Connection.new(user, api_key, true, service_net) unless $LOCAL
@@ -58,19 +58,19 @@ module Astrails
       end
 
       def container
-        @config[:cloudfiles, :container]
+        config[:cloudfiles, :container]
       end
 
       def user
-        @config[:cloudfiles, :user]
+        config[:cloudfiles, :user]
       end
 
       def api_key
-        @config[:cloudfiles, :api_key]
+        config[:cloudfiles, :api_key]
       end
 
       def service_net
-        @config[:cloudfiles, :service_net] || false
+        config[:cloudfiles, :service_net] || false
       end
     end
   end

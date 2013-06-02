@@ -11,7 +11,7 @@ module Astrails
       end
 
       def path
-        @path ||= File.expand_path(expand(@config[:local, :path] || raise(RuntimeError, "missing :local/:path")))
+        @path ||= File.expand_path(expand(config[:local, :path] || raise(RuntimeError, "missing :local/:path")))
       end
 
       def save
@@ -31,7 +31,7 @@ module Astrails
       end
 
       def cleanup
-        return unless keep = @config[:keep, :local]
+        return unless keep = config[:keep, :local]
 
         puts "listing files #{base}" if $_VERBOSE
 

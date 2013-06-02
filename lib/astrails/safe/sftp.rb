@@ -44,7 +44,7 @@ module Astrails
       def cleanup
         return if $LOCAL || $DRY_RUN
 
-        return unless keep = @config[:keep, :sftp]
+        return unless keep = config[:keep, :sftp]
 
         puts "listing files: #{host}:#{base}*" if $_VERBOSE
         opts = {}
@@ -68,19 +68,19 @@ module Astrails
       end
 
       def host
-        @config[:sftp, :host]
+        config[:sftp, :host]
       end
 
       def user
-        @config[:sftp, :user]
+        config[:sftp, :user]
       end
 
       def password
-        @config[:sftp, :password]
+        config[:sftp, :password]
       end
 
       def port
-        @config[:sftp, :port]
+        config[:sftp, :port]
       end
 
     end

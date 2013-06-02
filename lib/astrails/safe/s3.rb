@@ -40,7 +40,7 @@ module Astrails
       def cleanup
         return if $LOCAL
 
-        return unless keep = @config[:keep, :s3]
+        return unless keep = config[:keep, :s3]
 
         puts "listing files: #{bucket}:#{base}*" if $_VERBOSE
         files = AWS::S3::Bucket.objects(bucket, :prefix => base, :max_keys => keep * 2)
@@ -57,15 +57,15 @@ module Astrails
       end
 
       def bucket
-        @config[:s3, :bucket]
+        config[:s3, :bucket]
       end
 
       def key
-        @config[:s3, :key]
+        config[:s3, :key]
       end
 
       def secret
-        @config[:s3, :secret]
+        config[:s3, :secret]
       end
 
       private
