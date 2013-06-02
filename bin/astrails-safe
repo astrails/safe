@@ -2,10 +2,8 @@
 
 require 'rubygems'
 
-# require 'ruby-debug'
-$:.unshift File.expand_path("../../lib", __FILE__)
-
 require 'astrails/safe'
+
 include Astrails::Safe
 
 def die(msg)
