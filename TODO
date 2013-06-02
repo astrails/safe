@@ -1,3 +1,22 @@
+- refactor
+  - refactor out global variables. pass a config object around instead
+  - common logging
+  - remove 1.8.6 support
+  - module registry
+  - base => prefix ?
+  - move requires into specific modules
+
+- features
+  - remote-only s3 support
+  - generic notifier support
+    - email notifier
+    - hipchat
+  - generic error notifier support
+    - email
+    - hipchat
+
+
+
 - add 'silent'
 - handle errors from mysqldump
 - check that gpg is installed
