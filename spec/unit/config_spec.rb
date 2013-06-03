@@ -270,4 +270,18 @@ describe Astrails::Safe::Config do
     }
   end
 
+  it 'should accept multiple levels of data hash' do
+    config = Astrails::Safe::Config::Node.new nil, tar: {
+      s3: { bucket: '_bucket', key: '_key', secret: '_secret', },
+      keep: { s3: 2 }
+    }
+
+    config.to_hash.should == {
+      'tar' => {
+        's3' => { 'bucket' => '_bucket', 'key' => '_key', 'secret' => '_secret', },
+        'keep' => { 's3' => 2 }
+      }
+    }
+  end
+
 end

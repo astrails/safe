@@ -3,12 +3,18 @@ module Astrails
   module Safe
     module Config
       class Node
-        attr_reader :parent
-        attr_reader :data
+        attr_reader :parent, :data
+
         def initialize(parent = nil, data = {}, &block)
-          @parent, @data = parent, {}
-          data.each { |k, v| self[k] = v }
-          Builder.new(self).instance_eval(&block) if block
+          @parent = parent
+          @data = {}
+          merge data, &block
+        end
+
+        def merge data = {}, &block
+          builder = Builder.new(self, data)
+          builder.instance_eval(&block) if block
+          self
         end
 
         # looks for the path from this node DOWN. will not delegate to parent

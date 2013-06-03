@@ -4,30 +4,28 @@ describe Astrails::Safe::Cloudfiles do
 
   def def_config
     {
-      :cloudfiles => {
-        :container => "_container",
-        :user    => "_user",
-        :api_key => "_api_key",
+      cloudfiles: {
+        container: '_container',
+        user:      '_user',
+        api_key:   '_api_key',
       },
-      :keep => {
-        :cloudfiles => 2
-      }
+      keep: { cloudfiles: 2 }
     }
   end
 
   def def_backup(extra = {})
     {
-      :kind      => "_kind",
-      :filename  => "/backup/somewhere/_kind-_id.NOW.bar",
-      :extension => ".bar",
-      :id        => "_id",
-      :timestamp => "NOW"
+      kind:      '_kind',
+      filename:  '/backup/somewhere/_kind-_id.NOW.bar',
+      extension: '.bar',
+      id:        '_id',
+      timestamp: 'NOW'
     }.merge(extra)
   end
 
   def cloudfiles(config = def_config, backup = def_backup)
     Astrails::Safe::Cloudfiles.new(
-      Astrails::Safe::Config::Node.new(nil, config),
+      Astrails::Safe::Config::Node.new.merge(config),
       Astrails::Safe::Backup.new(backup)
     )
   end
@@ -41,7 +39,7 @@ describe Astrails::Safe::Cloudfiles do
 
       @container = "container"
 
-      stub(@container).objects(:prefix => "_kind/_id/_kind-_id.") { @files }
+      stub(@container).objects(prefix: "_kind/_id/_kind-_id.") { @files }
       stub(@container).delete_object(anything)
 
       stub(CloudFiles::Connection).
@@ -94,13 +92,13 @@ describe Astrails::Safe::Cloudfiles do
     end
     it "should use cloudfiles/path 1st" do
       @cloudfiles.config[:cloudfiles].data["path"] = "cloudfiles_path"
-      @cloudfiles.config[:local] = {:path => "local_path"}
+      @cloudfiles.config[:local] = {path: "local_path"}
       @cloudfiles.send(:path).should == "cloudfiles_path"
     end
 
     it "should use local/path 2nd" do
-      @cloudfiles.config[:local] = {:path => "local_path"}
-      @cloudfiles.send(:path).should == "local_path"
+      @cloudfiles.config.merge local: {path: 'local_path'}
+      @cloudfiles.send(:path).should == 'local_path'
     end
 
     it "should use constant 3rd" do
@@ -134,7 +132,7 @@ describe Astrails::Safe::Cloudfiles do
     end
 
     before(:each) do
-      @cloudfiles = cloudfiles(def_config, def_backup(:path => "foo"))
+      @cloudfiles = cloudfiles(def_config, def_backup(path: 'foo'))
       @full_path = "_kind/_id/backup/somewhere/_kind-_id.NOW.bar.bar"
     end
 

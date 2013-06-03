@@ -3,8 +3,15 @@ module Astrails
     module Config
       class Builder
 
-        def initialize(node)
+        def initialize(node, data = {})
           @node = node
+          data.each do |k, v|
+            if v.is_a?(Hash)
+              self.send k, Node.new(@node, v)
+            else
+              self.send k, v
+            end
+          end
         end
 
         %w/database archive repo/.each do |m|
@@ -15,7 +22,7 @@ module Astrails
 
             name = m.to_s + 's'
 
-            collection = @node[name] || @node.set(name, Node.new(@node, {}))
+            collection = @node.get(name) || @node.set(name, Node.new(@node, {}))
 
             collection.set id, Node.new(collection, data, &block)
           end
