@@ -24,6 +24,7 @@ module Astrails
 
         NAMES = %w/s3 cloudfiles key secret bucket api_key container service_net path gpg password keep local mysqldump pgdump command options
         user host port socket skip_tables tar files exclude filename svndump repo_path sftp ftp mongodump verbose dry_run local_only/
+        MULTIVALUES = %w/skip_tables exclude files/
         # supported args:
         #   args = [value]
         #   args = [id, data]
@@ -49,6 +50,12 @@ module Astrails
           raise "#{sym}: unexpected: #{args.inspect}" unless args.empty?
           unless (nil != id_or_value) || data || block
             raise "#{sym}: missing arguments"
+          end
+
+          unless MULTIVALUES.include?(sym.to_s)
+            if @node.get(sym)
+              raise(ArgumentError, "duplicate value for '#{sym}'")
+            end
           end
 
           if !data && !block
