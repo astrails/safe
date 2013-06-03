@@ -192,7 +192,7 @@ describe Astrails::Safe::Config do
           "misc" => { "files" => ["/backup/*.rb"] },
         },
       },
-      
+
       "mongodump" => {
         "host" => "host",
         "databases" => {
@@ -200,7 +200,7 @@ describe Astrails::Safe::Config do
         },
         "user" => "user",
         "password" => "password"
-      }      
+      }
     }
 
     config.to_hash.should == expected
@@ -232,6 +232,42 @@ describe Astrails::Safe::Config do
         path "bar"
       end
     end.should raise_error(ArgumentError, "duplicate value for 'path'")
+  end
+
+  it "should accept hash as data" do
+    Astrails::Safe::Config::Node.new do
+      tar do
+        archive 'blog', files: 'foo', exclude: ['aaa', 'bbb']
+      end
+    end.to_hash.should == {
+      'tar' => {
+        'archives' => {
+          'blog' => {
+            'files' => 'foo',
+            'exclude' => ['aaa', 'bbb']
+          }
+        }
+      }
+    }
+  end
+
+  it "should accept hash as data and a block" do
+    Astrails::Safe::Config::Node.new do
+      tar do
+        archive 'blog', files: 'foo' do
+          exclude ['aaa', 'bbb']
+        end
+      end
+    end.to_hash.should == {
+      'tar' => {
+        'archives' => {
+          'blog' => {
+            'files' => 'foo',
+            'exclude' => ['aaa', 'bbb']
+          }
+        }
+      }
+    }
   end
 
 end
