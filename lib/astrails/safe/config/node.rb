@@ -30,7 +30,7 @@ module Astrails
         MULTIVALUES = %w/skip_tables exclude files/
         def set(key, value, &block)
           if @data[key.to_s]
-            raise(ArgumentError, "duplicate value for '#{key}'") if value.is_a?(Hash) || !MULTIVALUES.include?(key.to_s)
+            raise(ArgumentError, "duplicate value for '#{key}'") if value.is_a?(Hash) || ! MULTIVALUES.include?(key.to_s)
           end
 
           if value.is_a?(Hash)

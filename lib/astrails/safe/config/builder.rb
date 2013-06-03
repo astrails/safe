@@ -2,14 +2,28 @@ module Astrails
   module Safe
     module Config
       class Builder
-        COLLECTIONS = %w/database archive repo/
-        ITEMS = %w/s3 cloudfiles key secret bucket api_key container service_net path gpg password keep local mysqldump pgdump command options
-        user host port socket skip_tables tar files exclude filename svndump repo_path sftp ftp mongodump verbose dry_run local_only/
-        NAMES = COLLECTIONS + ITEMS
+
         def initialize(node)
           @node = node
         end
 
+        %w/database archive repo/.each do |m|
+          define_method(m) do |id, data={}, &block|
+
+            #raise "bad collection id: #{id.inspect}" unless id.present?
+            raise "#{sym}: hash expected: #{data.inspect}" unless data.is_a?(Hash)
+
+            name = m.to_s + 's'
+
+            collection = @node[name] || @node.set(name, {})
+
+            collection.set id, data, &block
+
+          end
+        end
+
+        NAMES = %w/s3 cloudfiles key secret bucket api_key container service_net path gpg password keep local mysqldump pgdump command options
+        user host port socket skip_tables tar files exclude filename svndump repo_path sftp ftp mongodump verbose dry_run local_only/
         # supported args:
         #   args = [value]
         #   args = [id, data]
@@ -23,7 +37,7 @@ module Astrails
             id_or_value = args.shift # nil for args == []
           end
 
-          id_or_value = id_or_value.map {|v| v.to_s} if id_or_value.is_a?(Array)
+          id_or_value = id_or_value.map(&:to_s) if id_or_value.is_a?(Array)
 
           # do we have data hash?
           if data = args.shift
@@ -37,19 +51,9 @@ module Astrails
             raise "#{sym}: missing arguments"
           end
 
-          if COLLECTIONS.include?(sym.to_s) && id_or_value
-            data ||= {}
-          end
-
           if !data && !block
             # simple value assignment
-            @node[sym] = id_or_value
-
-          elsif id_or_value
-            # collection element with id => create collection node and a subnode in it
-            key = sym.to_s + "s"
-            collection = @node[key] || @node.set(key, {})
-            collection.set(id_or_value, data || {}, &block)
+            @node.set sym, id_or_value
 
           else
             # simple subnode
