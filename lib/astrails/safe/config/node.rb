@@ -27,18 +27,13 @@ module Astrails
         end
         alias :[] :find
 
-        def set(key, value, &block)
-          if value.is_a?(Hash)
-            @data[key.to_s] = Node.new(self, value, &block)
+        def set(key, value)
+          if @data[key.to_s]
+            @data[key.to_s] = [*@data[key.to_s]] + [value]
           else
-            raise(ArgumentError, "#{key}: no block supported for simple values") if block
-            if @data[key.to_s]
-              @data[key.to_s] = [*@data[key.to_s]] + [value]
-            else
-              @data[key.to_s] = value
-            end
-            value
+            @data[key.to_s] = value
           end
+          value
         end
         alias :[]= :set
 

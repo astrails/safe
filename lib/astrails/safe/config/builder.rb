@@ -10,15 +10,14 @@ module Astrails
         %w/database archive repo/.each do |m|
           define_method(m) do |id, data={}, &block|
 
-            #raise "bad collection id: #{id.inspect}" unless id.present?
+            raise "bad collection id: #{id.inspect}" unless id
             raise "#{sym}: hash expected: #{data.inspect}" unless data.is_a?(Hash)
 
             name = m.to_s + 's'
 
-            collection = @node[name] || @node.set(name, {})
+            collection = @node[name] || @node.set(name, Node.new(@node, {}))
 
-            collection.set id, data, &block
-
+            collection.set id, Node.new(collection, data, &block)
           end
         end
 
@@ -45,26 +44,25 @@ module Astrails
             raise "#{sym}: hash expected: #{data.inspect}" unless data.is_a?(Hash)
           end
 
-          #puts "#{sym}: args=#{args.inspect}, id_or_value=#{id_or_value}, data=#{data.inspect}, block=#{block.inspect}"
-
           raise "#{sym}: unexpected: #{args.inspect}" unless args.empty?
+
           unless (nil != id_or_value) || data || block
             raise "#{sym}: missing arguments"
           end
 
-          unless MULTIVALUES.include?(sym.to_s)
-            if @node.get(sym)
-              raise(ArgumentError, "duplicate value for '#{sym}'")
-            end
-          end
-
           if !data && !block
+            unless MULTIVALUES.include?(sym.to_s)
+              if @node.get(sym)
+                raise(ArgumentError, "duplicate value for '#{sym}'")
+              end
+            end
+
             # simple value assignment
             @node.set sym, id_or_value
 
           else
             # simple subnode
-            @node.set(sym, data || {}, &block)
+            @node.set sym, Node.new(@node, data || {}, &block)
           end
         end
       end
