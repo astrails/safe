@@ -33,13 +33,13 @@ module Astrails
         end
         alias :[] :find
 
+        def set_multi(key, value)
+          @data[key.to_s] ||= []
+          @data[key.to_s].concat [*value]
+        end
+
         def set(key, value)
-          if @data[key.to_s]
-            @data[key.to_s] = [*@data[key.to_s]] + [value]
-          else
-            @data[key.to_s] = value
-          end
-          value
+          @data[key.to_s] = value
         end
         alias :[]= :set
 

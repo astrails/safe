@@ -157,7 +157,7 @@ describe Astrails::Safe::S3 do
       dont_allow(Benchmark).realtime
       @s3.send(:save)
     end
-    
+
     it 'should not create a bucket that already exists' do
       add_stubs(:connection, :stat, :file_open, :s3_store)
       stub(AWS::S3::Bucket).find('_bucket') { true }

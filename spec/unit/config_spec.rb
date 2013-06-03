@@ -26,13 +26,13 @@ describe Astrails::Safe::Config do
       end
 
       gpg do
-        key "gpg-key"
         password "astrails"
+        key "gpg-key"
       end
 
       keep do
-        local 4
         s3 20
+        local 4
       end
 
       mysqldump do
@@ -182,11 +182,11 @@ describe Astrails::Safe::Config do
 
       "tar" => {
         "archives" => {
-          "git-repositories" => {"files" => "/home/git/repositories"},
-          "etc-files" => {"files" => "/etc", "exclude" => "/etc/puppet/other"},
-          "dot-configs" => {"files" => "/home/*/.[^.]*"},
+          "git-repositories" => {"files" => ["/home/git/repositories"]},
+          "etc-files" => {"files" => ["/etc"], "exclude" => ["/etc/puppet/other"]},
+          "dot-configs" => {"files" => ["/home/*/.[^.]*"]},
           "blog" => {
-            "files" => "/var/www/blog.astrails.com/",
+            "files" => ["/var/www/blog.astrails.com/"],
             "exclude" => ["/var/www/blog.astrails.com/log", "/var/www/blog.astrails.com/tmp"],
           },
           "misc" => { "files" => ["/backup/*.rb"] },
@@ -243,7 +243,7 @@ describe Astrails::Safe::Config do
       'tar' => {
         'archives' => {
           'blog' => {
-            'files' => 'foo',
+            'files' => ['foo'],
             'exclude' => ['aaa', 'bbb']
           }
         }
@@ -262,7 +262,7 @@ describe Astrails::Safe::Config do
       'tar' => {
         'archives' => {
           'blog' => {
-            'files' => 'foo',
+            'files' => ['foo'],
             'exclude' => ['aaa', 'bbb']
           }
         }
@@ -280,6 +280,26 @@ describe Astrails::Safe::Config do
       'tar' => {
         's3' => { 'bucket' => '_bucket', 'key' => '_key', 'secret' => '_secret', },
         'keep' => { 's3' => 2 }
+      }
+    }
+  end
+  
+  it 'should set multi value as array' do
+    config = Astrails::Safe::Config::Node.new do
+      tar do
+        archive 'foo' do
+          files 'bar'
+        end
+      end
+    end
+
+    config.to_hash.should == {
+      'tar' => {
+        'archives' => {
+          'foo' => {
+            'files' => ['bar']
+          }
+        }
       }
     }
   end
