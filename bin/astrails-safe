@@ -50,14 +50,14 @@ def main
 
   config = eval(File.read(config_file))
 
-  config.reset(:verbose,    true)  if opts.delete('-v') || opts.delete('--verbose')
-  config.reset(:verbose,    false) if opts.delete('--not-verbose')
+  config[:verbose]    = true  if opts.delete('-v') || opts.delete('--verbose')
+  config[:verbose]    = false if opts.delete('--not-verbose')
 
-  config.reset(:dry_run,    true)  if opts.delete('-n') || opts.delete('--dry-run')
-  config.reset(:dry_run,    false) if opts.delete('--not-dry-run')
+  config[:dry_run]    = true  if opts.delete('-n') || opts.delete('--dry-run')
+  config[:dry_run]    = false if opts.delete('--not-dry-run')
 
-  config.reset(:local_only, true)  if opts.delete('-L') || opts.delete('--local')
-  config.reset(:local_only, false) if opts.delete('--not-local')
+  config[:local_only] = true  if opts.delete('-L') || opts.delete('--local')
+  config[:local_only] = false if opts.delete('--not-local')
 
   process config
 end

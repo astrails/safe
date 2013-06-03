@@ -5,72 +5,72 @@ module Astrails
 
         def initialize(node, data = {})
           @node = node
-          data.each do |k, v|
-            if v.is_a?(Hash)
-              self.send k, Node.new(@node, v)
+          data.each { |k, v| self.send k, v }
+        end
+
+        SIMPLE_VALUES = %w/verbose dry_run local_only path command options user
+        host port password key secret bucket api_key container socket
+        service_net repo_path/
+        MULTI_VALUES = %w/skip_tables exclude files/
+        HASH_VALUES = %w/mysqldump tar gpg keep pgdump tar svndump sftp ftp mongodump/
+        MIXED_VALUES = %w/s3 local cloudfiles /
+        COLLECTIONS = %w/database archive repo/
+
+        SIMPLE_VALUES.each do |m|
+          define_method(m) do |value|
+            ensure_uniq(m)
+            @node.set m, value
+          end
+        end
+
+        MULTI_VALUES.each do |m|
+          define_method(m) do |value|
+            value = value.map(&:to_s) if value.is_a?(Array)
+            @node.set_multi m, value
+          end
+        end
+
+        HASH_VALUES.each do |m|
+          define_method(m) do |data={}, &block|
+            ensure_uniq(m)
+            ensure_hash(m, data)
+            @node.set m, Node.new(@node, data || {}, &block)
+          end
+        end
+
+        MIXED_VALUES.each do |m|
+          define_method(m) do |data={}, &block|
+            ensure_uniq(m)
+            if data.is_a?(Hash) || block
+              ensure_hash(m, data) if block
+              @node.set m, Node.new(@node, data, &block)
             else
-              self.send k, v
+              @node.set m, data
             end
           end
         end
 
-        %w/database archive repo/.each do |m|
+        COLLECTIONS.each do |m|
           define_method(m) do |id, data={}, &block|
 
             raise "bad collection id: #{id.inspect}" unless id
-            raise "#{sym}: hash expected: #{data.inspect}" unless data.is_a?(Hash)
+            ensure_hash(m, data)
 
-            name = m.to_s + 's'
-
+            name = "#{m}s"
             collection = @node.get(name) || @node.set(name, Node.new(@node, {}))
 
             collection.set id, Node.new(collection, data, &block)
           end
         end
 
-        %w/skip_tables exclude files/.each do |m|
-          define_method(m) do |value|
-            value = value.map(&:to_s) if value.is_a?(Array)
+        private
 
-            @node.set_multi m, value
-          end
+        def ensure_uniq(m)
+          raise(ArgumentError, "duplicate value for '#{m}'") if @node.get(m)
         end
 
-        NAMES = %w/s3 cloudfiles key secret bucket api_key container service_net path gpg password keep local mysqldump pgdump command options
-        user host port socket tar filename svndump repo_path sftp ftp mongodump verbose dry_run local_only/
-        def method_missing(sym, *args, &block)
-          return super unless NAMES.include?(sym.to_s)
-
-          # do we have id or value?
-          unless args.first.is_a?(Hash)
-            id_or_value = args.shift # nil for args == []
-          end
-
-          id_or_value = id_or_value.map(&:to_s) if id_or_value.is_a?(Array)
-
-          # do we have data hash?
-          if data = args.shift
-            raise "#{sym}: hash expected: #{data.inspect}" unless data.is_a?(Hash)
-          end
-
-          raise "#{sym}: unexpected: #{args.inspect}" unless args.empty?
-
-          unless (nil != id_or_value) || data || block
-            raise "#{sym}: missing arguments"
-          end
-
-          if !data && !block
-            if @node.get(sym)
-              raise(ArgumentError, "duplicate value for '#{sym}'")
-            end
-
-            # simple value assignment
-            @node.set sym, id_or_value
-
-          else
-            # simple subnode
-            @node.set sym, Node.new(@node, data || {}, &block)
-          end
+        def ensure_hash(k, v)
+          raise "#{k}: hash expected: #{v.inspect}" unless v.is_a?(Hash)
         end
       end
     end

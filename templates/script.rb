@@ -174,4 +174,10 @@ safe do
     # end
   end
 
+  # svndump do
+  #   repo :my_repo do
+  #     repo_path "/home/svn/my_repo"
+  #   end
+  # end
+
 end

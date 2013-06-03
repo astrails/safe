@@ -43,12 +43,6 @@ module Astrails
         end
         alias :[]= :set
 
-        # allows to override values from the configuration block
-        # used to (re)set global options from commandline
-        def reset(key, value)
-          @data[key.to_s] = value
-        end
-
         def each(&block)
           @data.each(&block)
         end
