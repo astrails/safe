@@ -18,10 +18,10 @@ module Astrails
         raise RuntimeError, "pipe-streaming not supported for S3." unless @backup.path
 
         # needed in cleanup even on dry run
-        AWS::S3::Base.establish_connection!(:access_key_id => key, :secret_access_key => secret, :use_ssl => true) unless config[:local_only]
+        AWS::S3::Base.establish_connection!(:access_key_id => key, :secret_access_key => secret, :use_ssl => true) unless local_only?
 
-        puts "Uploading #{bucket}:#{full_path}" if config[:verbose] || config[:dry_run]
-        unless config[:dry_run] || config[:local_only]
+        puts "Uploading #{bucket}:#{full_path}" if verbose? || dry_run?
+        unless dry_run? || local_only?
           if File.stat(@backup.path).size > MAX_S3_FILE_SIZE
             STDERR.puts "ERROR: File size exceeds maximum allowed for upload to S3 (#{MAX_S3_FILE_SIZE}): #{@backup.path}"
             return
@@ -32,27 +32,27 @@ module Astrails
               AWS::S3::S3Object.store(full_path, file, bucket)
             end
           end
-          puts "...done" if config[:verbose]
-          puts("Upload took " + sprintf("%.2f", benchmark) + " second(s).") if config[:verbose]
+          puts "...done" if verbose?
+          puts("Upload took " + sprintf("%.2f", benchmark) + " second(s).") if verbose?
         end
       end
 
       def cleanup
-        return if config[:local_only]
+        return if local_only?
 
         return unless keep = config[:keep, :s3]
 
-        puts "listing files: #{bucket}:#{base}*" if config[:verbose]
+        puts "listing files: #{bucket}:#{base}*" if verbose?
         files = AWS::S3::Bucket.objects(bucket, :prefix => base, :max_keys => keep * 2)
-        puts files.collect {|x| x.key} if config[:verbose]
+        puts files.collect {|x| x.key} if verbose?
 
         files = files.
           collect {|x| x.key}.
           sort
 
         cleanup_with_limit(files, keep) do |f|
-          puts "removing s3 file #{bucket}:#{f}" if config[:dry_run] || config[:verbose]
-          AWS::S3::Bucket.objects(bucket, :prefix => f)[0].delete unless config[:dry_run] || config[:local_only]
+          puts "removing s3 file #{bucket}:#{f}" if dry_run? || verbose?
+          AWS::S3::Bucket.objects(bucket, :prefix => f)[0].delete unless dry_run? || local_only?
         end
       end
 

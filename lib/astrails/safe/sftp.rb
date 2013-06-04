@@ -15,45 +15,45 @@ module Astrails
       def save
         raise RuntimeError, "pipe-streaming not supported for SFTP." unless @backup.path
 
-        puts "Uploading #{host}:#{full_path} via SFTP" if config[:verbose] || config[:dry_run]
+        puts "Uploading #{host}:#{full_path} via SFTP" if verbose? || dry_run?
 
-        unless config[:dry_run] || config[:local_only]
+        unless dry_run? || local_only?
           opts = {}
           opts[:password] = password if password
           opts[:port] = port if port
           Net::SFTP.start(host, user, opts) do |sftp|
-            puts "Sending #{@backup.path} to #{full_path}" if config[:verbose]
+            puts "Sending #{@backup.path} to #{full_path}" if verbose?
             begin
               sftp.upload! @backup.path, full_path
             rescue Net::SFTP::StatusException
-              puts "Ensuring remote path (#{path}) exists" if config[:verbose]
+              puts "Ensuring remote path (#{path}) exists" if verbose?
               # mkdir -p
               folders = path.split('/')
               folders.each_index do |i|
                 folder = folders[0..i].join('/')
-                puts "Creating #{folder} on remote" if config[:verbose]
+                puts "Creating #{folder} on remote" if verbose?
                 sftp.mkdir!(folder) rescue Net::SFTP::StatusException
               end
               retry
             end
           end
-          puts "...done" if config[:verbose]
+          puts "...done" if verbose?
         end
       end
 
       def cleanup
-        return if config[:local_only] || config[:dry_run]
+        return if local_only? || dry_run?
 
         return unless keep = config[:keep, :sftp]
 
-        puts "listing files: #{host}:#{base}*" if config[:verbose]
+        puts "listing files: #{host}:#{base}*" if verbose?
         opts = {}
         opts[:password] = password if password
         opts[:port] = port if port
         Net::SFTP.start(host, user, opts) do |sftp|
           files = sftp.dir.glob(path, File.basename("#{base}*"))
 
-          puts files.collect {|x| x.name } if config[:verbose]
+          puts files.collect {|x| x.name } if verbose?
 
           files = files.
             collect {|x| x.name }.
@@ -61,8 +61,8 @@ module Astrails
 
           cleanup_with_limit(files, keep) do |f|
             file = File.join(path, f)
-            puts "removing sftp file #{host}:#{file}" if config[:dry_run] || config[:verbose]
-            sftp.remove!(file) unless config[:dry_run] || config[:local_only]
+            puts "removing sftp file #{host}:#{file}" if dry_run? || verbose?
+            sftp.remove!(file) unless dry_run? || local_only?
           end
         end
       end

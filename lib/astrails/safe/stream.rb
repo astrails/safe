@@ -6,7 +6,6 @@ module Astrails
       def initialize(config, backup)
         @config, @backup = config, backup
       end
-
       # FIXME: move to Backup
       def expand(path)
         path .
@@ -15,6 +14,19 @@ module Astrails
         gsub(/:timestamp\b/, @backup.timestamp)
       end
 
+      private
+
+      def verbose?
+        config[:verbose]
+      end
+
+      def local_only?
+        config[:local_only]
+      end
+
+      def dry_run?
+        config[:dry_run]
+      end
     end
   end
 end

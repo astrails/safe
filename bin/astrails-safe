@@ -40,8 +40,12 @@ def main
 
   config_file = File.expand_path(args.first)
 
+  is_dry = (opts.delete('-n') || opts.delete('--dry-run')) && ! opts.delete('--not-dry-run')
+  is_verbose = (opts.delete('-v') || opts.delete('--verbose')) && !opts.delete('--not-verbose')
+  is_local_only = (opts.delete('-L') || opts.delete('--local')) && !opts.delete('--not-local')
+
   unless File.exists?(config_file)
-    die "Missing configuration file. NOT CREATED! Rerun w/o the -n argument to create a template configuration file." if config[:dry_run]
+    die "Missing configuration file. NOT CREATED! Rerun w/o the -n argument to create a template configuration file." if is_dry
 
     FileUtils.cp File.join(Astrails::Safe::ROOT, "templates", "script.rb"), config_file
 
@@ -50,14 +54,9 @@ def main
 
   config = eval(File.read(config_file))
 
-  config[:verbose]    = true  if opts.delete('-v') || opts.delete('--verbose')
-  config[:verbose]    = false if opts.delete('--not-verbose')
-
-  config[:dry_run]    = true  if opts.delete('-n') || opts.delete('--dry-run')
-  config[:dry_run]    = false if opts.delete('--not-dry-run')
-
-  config[:local_only] = true  if opts.delete('-L') || opts.delete('--local')
-  config[:local_only] = false if opts.delete('--not-local')
+  config[:verbose]    = is_verbose
+  config[:dry_run]    = is_dry
+  config[:local_only] = is_local_only
 
   process config
 end
