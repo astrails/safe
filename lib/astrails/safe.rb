@@ -42,9 +42,10 @@ module Astrails
     ROOT = File.join(File.dirname(__FILE__), "..", "..")
 
     def safe(&block)
-      config = Config::Node.new(&block)
-      #config.dump
+      Config::Node.new(&block)
+    end
 
+    def process(config)
 
       [[Mysqldump, [:mysqldump, :databases]],
        [Pgdump,    [:pgdump,    :databases]],
@@ -62,5 +63,6 @@ module Astrails
       Astrails::Safe::TmpFile.cleanup
     end
     module_function :safe
+    module_function :process
   end
 end

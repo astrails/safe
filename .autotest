@@ -1,0 +1,3 @@
+Autotest.add_hook(:initialize) do |at|
+  at.add_mapping(%r{lib/astrails/safe/config/.*\.rb$}, true) {'spec/astrails/safe/config_spec.rb'}
+end

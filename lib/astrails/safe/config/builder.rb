@@ -2,57 +2,75 @@ module Astrails
   module Safe
     module Config
       class Builder
-        COLLECTIONS = %w/database archive repo/
-        ITEMS = %w/s3 cloudfiles key secret bucket api_key container service_net path gpg password keep local mysqldump pgdump command options
-        user host port socket skip_tables tar files exclude filename svndump repo_path sftp ftp mongodump/
-        NAMES = COLLECTIONS + ITEMS
-        def initialize(node)
+
+        def initialize(node, data = {})
           @node = node
+          data.each { |k, v| self.send k, v }
         end
 
-        # supported args:
-        #   args = [value]
-        #   args = [id, data]
-        #   args = [data]
-        # id/value - simple values, data - hash
-        def method_missing(sym, *args, &block)
-          return super unless NAMES.include?(sym.to_s)
+        SIMPLE_VALUES = %w/verbose dry_run local_only path command options user
+        host port password key secret bucket api_key container socket
+        service_net repo_path/
+        MULTI_VALUES = %w/skip_tables exclude files/
+        HASH_VALUES = %w/mysqldump tar gpg keep pgdump tar svndump sftp ftp mongodump/
+        MIXED_VALUES = %w/s3 local cloudfiles /
+        COLLECTIONS = %w/database archive repo/
 
-          # do we have id or value?
-          unless args.first.is_a?(Hash)
-            id_or_value = args.shift # nil for args == []
+        SIMPLE_VALUES.each do |m|
+          define_method(m) do |value|
+            ensure_uniq(m)
+            @node.set m, value
           end
+        end
 
-          id_or_value = id_or_value.map {|v| v.to_s} if id_or_value.is_a?(Array)
-
-          # do we have data hash?
-          if data = args.shift
-            raise "#{sym}: hash expected: #{data.inspect}" unless data.is_a?(Hash)
+        MULTI_VALUES.each do |m|
+          define_method(m) do |value|
+            value = value.map(&:to_s) if value.is_a?(Array)
+            @node.set_multi m, value
           end
+        end
 
-          #puts "#{sym}: args=#{args.inspect}, id_or_value=#{id_or_value}, data=#{data.inspect}, block=#{block.inspect}"
-
-          raise "#{sym}: unexpected: #{args.inspect}" unless args.empty?
-          raise "#{sym}: missing arguments" unless id_or_value || data || block
-
-          if COLLECTIONS.include?(sym.to_s) && id_or_value
-            data ||= {}
+        HASH_VALUES.each do |m|
+          define_method(m) do |data={}, &block|
+            ensure_uniq(m)
+            ensure_hash(m, data)
+            @node.set m, Node.new(@node, data || {}, &block)
           end
+        end
 
-          if !data && !block
-            # simple value assignment
-            @node[sym] = id_or_value
-
-          elsif id_or_value
-            # collection element with id => create collection node and a subnode in it
-            key = sym.to_s + "s"
-            collection = @node[key] || @node.set(key, {})
-            collection.set(id_or_value, data || {}, &block)
-
-          else
-            # simple subnode
-            @node.set(sym, data || {}, &block)
+        MIXED_VALUES.each do |m|
+          define_method(m) do |data={}, &block|
+            ensure_uniq(m)
+            if data.is_a?(Hash) || block
+              ensure_hash(m, data) if block
+              @node.set m, Node.new(@node, data, &block)
+            else
+              @node.set m, data
+            end
           end
+        end
+
+        COLLECTIONS.each do |m|
+          define_method(m) do |id, data={}, &block|
+
+            raise "bad collection id: #{id.inspect}" unless id
+            ensure_hash(m, data)
+
+            name = "#{m}s"
+            collection = @node.get(name) || @node.set(name, Node.new(@node, {}))
+
+            collection.set id, Node.new(collection, data, &block)
+          end
+        end
+
+        private
+
+        def ensure_uniq(m)
+          raise(ArgumentError, "duplicate value for '#{m}'") if @node.get(m)
+        end
+
+        def ensure_hash(k, v)
+          raise "#{k}: hash expected: #{v.inspect}" unless v.is_a?(Hash)
         end
       end
     end

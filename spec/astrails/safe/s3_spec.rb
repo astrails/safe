@@ -27,7 +27,7 @@ describe Astrails::Safe::S3 do
 
   def s3(config = def_config, backup = def_backup)
     Astrails::Safe::S3.new(
-      Astrails::Safe::Config::Node.new(nil, config),
+      Astrails::Safe::Config::Node.new.merge(config),
       Astrails::Safe::Backup.new(backup)
     )
   end
@@ -93,7 +93,7 @@ describe Astrails::Safe::S3 do
     end
 
     it "should use local/path 2nd" do
-      @s3.config[:local] = {:path => "local_path"}
+      @s3.config.merge local: {path: "local_path"}
       @s3.send(:path).should == "local_path"
     end
 
@@ -157,7 +157,7 @@ describe Astrails::Safe::S3 do
       dont_allow(Benchmark).realtime
       @s3.send(:save)
     end
-    
+
     it 'should not create a bucket that already exists' do
       add_stubs(:connection, :stat, :file_open, :s3_store)
       stub(AWS::S3::Bucket).find('_bucket') { true }
