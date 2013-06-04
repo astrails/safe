@@ -36,7 +36,7 @@ describe "tar backup" do
 
     stub(Time).now {@now} # Freeze
 
-    Astrails::Safe.safe do
+    config = Astrails::Safe.safe do
       local :path => "#{dst}/:kind"
       tar do
         archive :test1 do
@@ -46,6 +46,7 @@ describe "tar backup" do
         end
       end
     end
+    Astrails::Safe.process config
 
     @backup = "#{dst}/archive/archive-test1.#{@timestamp}.tar.gz"
   end

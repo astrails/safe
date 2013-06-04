@@ -3,19 +3,25 @@ module Astrails
   module Safe
     module Config
       class Node
-        attr_reader :parent
-        attr_reader :data
+        attr_reader :parent, :data
+
         def initialize(parent = nil, data = {}, &block)
-          @parent, @data = parent, {}
-          data.each { |k, v| self[k] = v }
-          Builder.new(self).instance_eval(&block) if block
+          @parent = parent
+          @data = {}
+          merge data, &block
+        end
+
+        def merge data = {}, &block
+          builder = Builder.new(self, data)
+          builder.instance_eval(&block) if block
+          self
         end
 
         # looks for the path from this node DOWN. will not delegate to parent
         def get(*path)
           key = path.shift
           value = @data[key.to_s]
-          return value if value && path.empty?
+          return value if (nil != value) && path.empty?
 
           value && value.get(*path)
         end
@@ -27,23 +33,13 @@ module Astrails
         end
         alias :[] :find
 
-        MULTIVALUES = %w/skip_tables exclude files/
-        def set(key, value, &block)
-          if @data[key.to_s]
-            raise(ArgumentError, "duplicate value for '#{key}'") if value.is_a?(Hash) || !MULTIVALUES.include?(key.to_s)
-          end
+        def set_multi(key, value)
+          @data[key.to_s] ||= []
+          @data[key.to_s].concat [*value]
+        end
 
-          if value.is_a?(Hash)
-            @data[key.to_s] = Node.new(self, value, &block)
-          else
-            raise(ArgumentError, "#{key}: no block supported for simple values") if block
-            if @data[key.to_s]
-              @data[key.to_s] = [*@data[key.to_s]] + [value]
-            else
-              @data[key.to_s] = value
-            end
-            value
-          end
+        def set(key, value)
+          @data[key.to_s] = value
         end
         alias :[]= :set
 

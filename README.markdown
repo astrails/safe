@@ -134,6 +134,8 @@ The procedure to create and transfer the key is as follows:
 ## Example configuration
 
     safe do
+      verbose true
+
       local :path => "/backup/:kind/:id"
 
       s3 do

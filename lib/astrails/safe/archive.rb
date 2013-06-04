@@ -3,7 +3,7 @@ module Astrails
     class Archive < Source
 
       def command
-        "tar -cf - #{@config[:options]} #{tar_exclude_files} #{tar_files}"
+        "tar -cf - #{config[:options]} #{tar_exclude_files} #{tar_files}"
       end
 
       def extension; '.tar'; end
@@ -11,12 +11,12 @@ module Astrails
       protected
 
       def tar_exclude_files
-        [*@config[:exclude]].compact.map{|x| "--exclude=#{x}"}.join(" ")
+        [*config[:exclude]].compact.map{|x| "--exclude=#{x}"}.join(" ")
       end
 
       def tar_files
-        raise RuntimeError, "missing files for tar" unless @config[:files]
-        [*@config[:files]].map{|s| s.strip}.join(" ")
+        raise RuntimeError, "missing files for tar" unless config[:files]
+        [*config[:files]].map{|s| s.strip}.join(" ")
       end
 
     end
