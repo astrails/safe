@@ -57,7 +57,7 @@ module Astrails
             sort
 
           cleanup_with_limit(files, keep) do |f|
-            file = File.join(path, f)
+            file = File.path(f)
             puts "removing ftp file #{host}:#{file}" if dry_run? || verbose?
             ftp.delete(file) unless dry_run? || local_only?
           end
