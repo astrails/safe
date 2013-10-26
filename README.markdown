@@ -160,6 +160,14 @@ The procedure to create and transfer the key is as follows:
         password "ssh password for sftp"
       end
 
+      ftp do
+        host "YOUR_REMOTE_HOSTNAME"
+        user "YOUR_REMOTE_USERNAME"
+        # port "NON STANDARD FTP PORT"
+        password "YOUR_REMOTE_PASSWORD"
+        path ":kind/:id" # this is the default
+      end
+
       gpg do
         command "/usr/local/bin/gpg"
         options  "--no-use-agent"
