@@ -24,6 +24,25 @@ module Astrails
           Net::FTP.open(host) do |ftp|
             ftp.connect(host, port)
             ftp.login(user, password)
+
+            dir = File.dirname(full_path)
+            parts = dir.split("/")
+            growing_path = ""
+            for part in parts
+              next if part == ""
+              if growing_path == ""
+                growing_path = part
+              else
+                growing_path = File.join(growing_path, part)
+              end
+              puts "Trying to create remote directory (#{growing_path})" if verbose?
+              begin
+                ftp.mkdir(growing_path)
+              rescue Net::FTPPermError
+                puts "Remote directory (#{growing_path}) exists, or no enough permissions" if verbose?
+              end
+            end
+
             puts "Sending #{@backup.path} to #{full_path}" if verbose?
             begin
               ftp.put(@backup.path, full_path)
