@@ -67,7 +67,7 @@ module Astrails
         end
 
         simple_value :verbose, :dry_run, :local_only, :path, :command,
-          :options, :user, :host, :port, :password, :key, :secret, :bucket,
+          :options, :user, :host, :port, :password, :key, :secret, :bucket, :endpoint,
           :api_key, :container, :socket, :service_net, :repo_path
         multi_value :skip_tables, :exclude, :files
         hash_value :mysqldump, :tar, :gpg, :keep, :pgdump, :tar, :svndump,
