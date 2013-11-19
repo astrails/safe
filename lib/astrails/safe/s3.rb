@@ -18,7 +18,7 @@ module Astrails
         raise RuntimeError, "pipe-streaming not supported for S3." unless @backup.path
 
         # needed in cleanup even on dry run
-        AWS::S3::Base.establish_connection!(:access_key_id => key, :secret_access_key => secret, :use_ssl => true) unless local_only?
+        AWS::S3::Base.establish_connection!(:access_key_id => key, :secret_access_key => secret, :s3_endpoint => endpoint, :use_ssl => true) unless local_only?
 
         puts "Uploading #{bucket}:#{full_path}" if verbose? || dry_run?
         unless dry_run? || local_only?
@@ -62,6 +62,10 @@ module Astrails
 
       def key
         config[:s3, :key]
+      end
+
+      def endpoint
+        config[:s3, :endpoint]
       end
 
       def secret
