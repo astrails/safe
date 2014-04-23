@@ -41,8 +41,11 @@ The following functionality was contributed by astrails-safe users:
 Thanks to all :)
 
 ## Installation
+Using the gem outside of a bundler managed project:
 
-    sudo gem install astrails-safe --source http://gemcutter.org
+    gem install astrails-safe
+
+In a bundler managed project, like a Rails app, add the gem to your Gemfile.
 
 ## Reporting problems
 
@@ -84,7 +87,7 @@ transfer your public key to the server that will do the backups.
 This way the server will only know how to encrypt the backups but only you
 will be able to decrypt them using the secret key you have locally. Of course
 you MUST backup your backup encryption key :)
-We recommend also pringing the hard paper copy of your GPG key 'just in case'.
+We recommend also printing the hard paper copy of your GPG key 'just in case'.
 
 The procedure to create and transfer the key is as follows:
 
