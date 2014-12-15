@@ -18,20 +18,20 @@ Remote storage is supported on Amazon S3, Rackspace Cloud Files, or just plain S
     "README.markdown",
     "TODO"
   ]
-  
+
   s.files                     = `git ls-files`.split("\n")
   s.test_files                = `git ls-files spec`.split("\n")
   s.require_paths             = ["lib"]
-  s.required_rubygems_version = %q{1.5.0}
-  s.default_executable        = %q{astrails-safe}  
+  s.required_rubygems_version = '>=1.5.0'
+  s.default_executable        = %q{astrails-safe}
   s.executables               = ["astrails-safe"]
 
   # tests
   s.add_development_dependency 'rspec', '~> 1.3.2'
   s.add_development_dependency 'rr', '~> 1.0.4'
-  
+
   s.add_runtime_dependency 'aws-sdk', '~> 1.2.3'
   s.add_runtime_dependency 'cloudfiles', '~> 1.4.7'
-  s.add_runtime_dependency 'net-sftp', '~> 2.0.4'  
+  s.add_runtime_dependency 'net-sftp', '~> 2.0.4'
   s.add_runtime_dependency 'toadhopper', '~> 2.0'
 end
