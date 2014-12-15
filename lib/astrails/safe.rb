@@ -69,7 +69,9 @@ module Astrails
             end
             Raven.capture_exception(e)
           end
-        rescue
+        rescue => e
+          STDERR.puts "Error sending notification: #{e.class}, #{e.message}"
+          STDERR.puts e.backtrace
         end
       ensure
         Astrails::Safe::TmpFile.cleanup
