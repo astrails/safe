@@ -153,8 +153,8 @@ describe Astrails::Safe::S3 do
       @s3.send(:save)
     end
 
-    it "should fail on files bigger then 5G" do
-      mock(File).stat("foo").stub!.size {5*1024*1024*1024+1}
+    it "should fail on files bigger than 5TB" do
+      mock(File).stat("foo").stub!.size { 5 * 1024 * 1024 * 1024 * 2014 + 1 }
       mock(STDERR).puts(anything)
       dont_allow(Benchmark).realtime
       @s3.send(:save)

@@ -4,6 +4,7 @@ require 'net/sftp'
 require 'fileutils'
 require 'benchmark'
 require 'toadhopper'
+require 'raven'
 
 require 'tempfile'
 require 'extensions/mktmpdir'
@@ -61,6 +62,12 @@ module Astrails
           if config["airbrake"]
             toad = Toadhopper.new(config["airbrake"]["api_key"])
             toad.post!(e)
+          end
+          if config['raven']
+            Raven.configure do |raven_config|
+              raven_config.dsn = config['raven']['dsn']
+            end
+            Raven.capture_exception(e)
           end
         rescue
         end

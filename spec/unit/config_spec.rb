@@ -7,6 +7,10 @@ describe Astrails::Safe::Config do
         api_key "test_airbrake_api_key"
       end
 
+      raven do
+        dsn "http://example.com/dsn"
+      end
+
       local do
         path "path"
       end
@@ -115,6 +119,7 @@ describe Astrails::Safe::Config do
 
     expected = {
       "airbrake" => {"api_key" => "test_airbrake_api_key"},
+      "raven" => {"dsn" => "http://example.com/dsn"},
 
       "local" => {"path" => "path"},
 
@@ -189,7 +194,7 @@ describe Astrails::Safe::Config do
           "misc" => { "files" => ["/backup/*.rb"] },
         },
       },
-      
+
       "mongodump" => {
         "host" => "host",
         "databases" => {
@@ -197,7 +202,7 @@ describe Astrails::Safe::Config do
         },
         "user" => "user",
         "password" => "password"
-      }      
+      }
     }
 
     config.to_hash.should == expected
