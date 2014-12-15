@@ -123,7 +123,7 @@ describe Astrails::Safe::Gpg do
 
     describe "with password" do
       def pgpg(extra = {})
-        returning(gpg({:gpg => {:password => "bar", :options => "GPG-OPT"}.merge(extra), :options => "OPT"})) do |g|
+        gpg({:gpg => {:password => "bar", :options => "GPG-OPT"}.merge(extra), :options => "OPT"}).tap do |g|
           stub(g).gpg_password_file(anything) {"pass-file"}
         end
       end
