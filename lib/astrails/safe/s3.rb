@@ -39,7 +39,7 @@ module Astrails
         return unless keep = @config[:keep, :s3]
 
         puts "listing files: #{bucket}:#{base}*" if $_VERBOSE
-        files = remote_bucket.objects.with_prefix(:prefix => base)
+        files = remote_bucket.objects.with_prefix(base)
         puts files.collect {|x| x.key} if $_VERBOSE
 
         files = files.sort { |x,y| x.key <=> y.key }

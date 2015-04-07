@@ -42,7 +42,7 @@ describe Astrails::Safe::S3 do
         object
       end
 
-      stub(@s3).remote_bucket.stub!.objects.stub!.with_prefix(:prefix => '_kind/_id/_kind-_id.') { @files }
+      stub(@s3).remote_bucket.stub!.objects.stub!.with_prefix('_kind/_id/_kind-_id.') { @files }
     end
 
     it "should check [:keep, :s3]" do
