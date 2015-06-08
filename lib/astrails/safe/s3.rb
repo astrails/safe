@@ -53,7 +53,7 @@ module Astrails
       def remote_bucket
         unless @remote_bucket
           s3 = AWS::S3.new(:access_key_id => key, :secret_access_key => secret)
-          @remote_bucket = s3.buckets.create(bucket)
+          @remote_bucket = s3.buckets[bucket]
         end
         @remote_bucket
       end

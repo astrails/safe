@@ -114,11 +114,11 @@ describe Astrails::Safe::S3 do
         when :stat
           stub(File).stat("foo").stub!.size {123}
         when :create_bucket
-          stub.instance_of(AWS::S3).buckets.stub!.create.stub!
+          stub.instance_of(AWS::S3).buckets.stub!.[].stub!
         when :file_open
           stub(File).open("foo") {|f, block| block.call(:opened_file)}
         when :s3_store
-          stub.instance_of(AWS::S3).buckets.stub!.create.stub!.objects.stub!.create(@full_path, :data => :opened_file)
+          stub.instance_of(AWS::S3).buckets.stub!.[].stub!.objects.stub!.create(@full_path, :data => :opened_file)
         end
       end
     end
